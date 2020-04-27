@@ -1,0 +1,10 @@
+language: java
+jdk:
+- openjdk8
+install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true
+script: mvn test
+after_success:
+- mvn clean cobertura:cobertura coveralls:report
+env:
+  global:
+    secure: LCB9qGBQ6t6MO6YbPW8j/74KuXHMl+OHW2CuI6tImZlr7cfLP6hqH3q03Y5uSqmYKBP/oi7eQqpmzQ60o7ZY8OhXSYnTy0Y573IzYjOOXqfP+I8kuLiBdij/60eLTQLP47FVpUVwu0be+qfFDfgTx5dUY91LSrKIenqT6JzR87uwQZfA+bABBbKo90BxJZRwnwGWibfMLbIrbhahYfr8bSexAlb9wOjULo29ZGRO0z2CLKRIGOcXutNoZ3XWj/5Pp+slQkAp6IHoqswdREjFY4Aqg/wMANXDq4ytMiQV2AeutyIp01qjC2Vk+SsXp15iL+nkx4RrWuF52SgeBh5U4Uw6Egy2y8RPAsBst68EsanmhCQNIZqokUFnlJd1BmFxyOR3tIy6WmaVcIR7F4/eMORU+eL52bN0qq5gNkHK+UvS9DqBowQcRiu52EIDltYRgPXCMWV5rliYnz0PESJESM8XAdsWGXzHAMKplFHRnKfdbje74D/e5N0y6/hq/R7IE1NUT0X9EeMpH4zpKgxtwXRDlXqvPHMjBZk2At7Phuh2NUohRDlGq+IGdqoJnFW87JNlMIjaLG5iw51H+egR3w1yYvTud36qemnNrpfCfU3Nf5kHm721CuRsXiRfUVW2+6/eBv7Alzq6kVZxE+10cqNun4Yp/2opmmfAu0SSr/U=
