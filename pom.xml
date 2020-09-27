@@ -6,10 +6,11 @@
     <groupId>com.github.houbb</groupId>
     <artifactId>cache</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.2</version>
     <modules>
         <module>cache-api</module>
         <module>cache-core</module>
+        <module>cache-test</module>
     </modules>
 
     <properties>
@@ -32,7 +33,8 @@
         <project.compiler.level>1.7</project.compiler.level>
 
         <!--============================== INTER ==============================-->
-        <heaven.version>0.1.101</heaven.version>
+        <heaven.version>0.1.115</heaven.version>
+        <test.version>0.0.1</test.version>
 
         <!--============================== OTHER ==============================-->
         <junit.version>4.12</junit.version>
@@ -57,6 +59,11 @@
                 <groupId>com.github.houbb</groupId>
                 <artifactId>heaven</artifactId>
                 <version>${heaven.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.houbb</groupId>
+                <artifactId>test-core</artifactId>
+                <version>${test.version}</version>
             </dependency>
 
             <!--============================== OTHER ==============================-->

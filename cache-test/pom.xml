@@ -9,22 +9,20 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cache-core</artifactId>
+    <artifactId>cache-test</artifactId>
 
     <dependencies>
         <!--============================== SELF ==============================-->
         <dependency>
             <groupId>com.github.houbb</groupId>
-            <artifactId>cache-api</artifactId>
+            <artifactId>cache-core</artifactId>
         </dependency>
 
         <!--============================== INTER ==============================-->
         <dependency>
             <groupId>com.github.houbb</groupId>
-            <artifactId>heaven</artifactId>
+            <artifactId>test-core</artifactId>
         </dependency>
-
-        <!--============================== OTHER ==============================-->
     </dependencies>
 
 </project>
