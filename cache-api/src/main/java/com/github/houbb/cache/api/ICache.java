@@ -3,6 +3,7 @@ package com.github.houbb.cache.api;
 import java.util.Map;
 
 /**
+ * 缓存接口
  * @author binbin.hou
  * @since 0.0.1
  */
