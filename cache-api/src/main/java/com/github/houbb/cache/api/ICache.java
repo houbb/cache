@@ -41,7 +41,7 @@ public interface ICache<K, V> extends Map<K, V> {
      * 如果增加 lastAccessTime 过期，本方法可以不做修改。
      *
      * @param key         key
-     * @param timeInMills 毫秒时间
+     * @param timeInMills 毫秒时间之后过期
      * @return this
      * @since 0.0.3
      */
@@ -52,7 +52,7 @@ public interface ICache<K, V> extends Map<K, V> {
      * @param key key
      * @param timeInMills 时间戳
      * @return this
-     * @since 0.0.5
+     * @since 0.0.3
      */
     ICache<K, V> expireAt(final K key, final long timeInMills);
 

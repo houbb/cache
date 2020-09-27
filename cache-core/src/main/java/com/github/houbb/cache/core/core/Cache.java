@@ -3,10 +3,9 @@ package com.github.houbb.cache.core.core;
 import com.github.houbb.cache.api.*;
 import com.github.houbb.cache.core.exception.CacheRuntimeException;
 import com.github.houbb.cache.core.support.evict.CacheEvictContext;
+import com.github.houbb.cache.core.support.expire.CacheExpire;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 缓存信息
@@ -36,44 +35,71 @@ public class Cache<K,V> implements ICache<K,V> {
      */
     private final ICacheEvict<K,V> cacheEvict;
 
+    /**
+     * 过期策略
+     * 暂时不做暴露
+     * @since 0.0.3
+     */
+    private final ICacheExpire<K,V> cacheExpire;
+
     public Cache(ICacheContext<K, V> context) {
         this.map = context.map();
         this.sizeLimit = context.size();
         this.cacheEvict = context.cacheEvict();
+        this.cacheExpire = new CacheExpire<>(this);
     }
 
     @Override
     public ICache<K, V> expire(K key, long timeInMills) {
-        throw new UnsupportedOperationException();
+        long expireTime = System.currentTimeMillis() + timeInMills;
+        return this.expireAt(key, expireTime);
     }
 
     @Override
     public ICache<K, V> expireAt(K key, long timeInMills) {
-        throw new UnsupportedOperationException();
+        this.cacheExpire.expire(key, timeInMills);
+        return this;
     }
 
     @Override
     public int size() {
+        //1. 刷新所有过期信息
+        this.refreshExpireAllKeys();
+
         return map.size();
     }
 
     @Override
     public boolean isEmpty() {
+        //1. 刷新所有过期信息
+        this.refreshExpireAllKeys();
+
         return map.isEmpty();
     }
 
     @Override
     public boolean containsKey(Object key) {
+        //1. 刷新所有过期信息
+        this.refreshExpireAllKeys();
+
         return map.containsKey(key);
     }
 
     @Override
     public boolean containsValue(Object value) {
+        //1. 刷新所有过期信息
+        this.refreshExpireAllKeys();
+
         return map.containsValue(value);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public V get(Object key) {
+        //1. 刷新所有过期信息
+        K genericKey = (K) key;
+        this.cacheExpire.refreshExpire(Collections.singletonList(genericKey));
+
         return map.get(key);
     }
 
@@ -120,17 +146,31 @@ public class Cache<K,V> implements ICache<K,V> {
 
     @Override
     public Set<K> keySet() {
+        this.refreshExpireAllKeys();
+
         return map.keySet();
     }
 
     @Override
     public Collection<V> values() {
+        this.refreshExpireAllKeys();
+
         return map.values();
     }
 
     @Override
     public Set<Entry<K, V>> entrySet() {
+        this.refreshExpireAllKeys();
+
         return map.entrySet();
+    }
+
+    /**
+     * 刷新懒过期处理所有的 keys
+     * @since 0.0.3
+     */
+    private void refreshExpireAllKeys() {
+        this.cacheExpire.refreshExpire(map.keySet());
     }
 
 }
