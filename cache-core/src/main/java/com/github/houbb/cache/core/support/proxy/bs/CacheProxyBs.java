@@ -36,6 +36,7 @@ public final class CacheProxyBs {
      * 执行
      * @return 结果
      * @since 0.0.4
+     * @throws Throwable 异常
      */
     @SuppressWarnings("all")
     public Object execute() throws Throwable {

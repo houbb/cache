@@ -28,7 +28,8 @@ public final class CacheProxy {
 
     /**
      * 获取对象代理
-     * @param <T> 泛型
+     * @param <K> 泛型 key
+     * @param <V> 泛型 value
      * @param cache 对象代理
      * @return 代理信息
      * @since 0.0.4
