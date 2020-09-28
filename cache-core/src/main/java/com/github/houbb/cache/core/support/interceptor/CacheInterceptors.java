@@ -28,8 +28,6 @@ public final class CacheInterceptors {
 
     /**
      * 默认刷新
-     * @param <K> key
-     * @param <V> value
      * @return 结果
      * @since 0.0.5
      */
