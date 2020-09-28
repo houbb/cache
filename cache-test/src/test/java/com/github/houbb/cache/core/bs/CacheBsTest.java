@@ -68,7 +68,7 @@ public class CacheBsTest {
         cache.put("1", "1");
         cache.put("2", "2");
 
-        cache.expire("1", 10);
+        cache.expire("1", 40);
         Assert.assertEquals(2, cache.size());
 
         TimeUnit.MILLISECONDS.sleep(50);

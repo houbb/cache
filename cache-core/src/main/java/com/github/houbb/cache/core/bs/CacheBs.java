@@ -5,6 +5,7 @@ import com.github.houbb.cache.api.ICacheEvict;
 import com.github.houbb.cache.core.core.Cache;
 import com.github.houbb.cache.core.core.CacheContext;
 import com.github.houbb.cache.core.support.evict.CacheEvicts;
+import com.github.houbb.cache.core.support.proxy.CacheProxy;
 import com.github.houbb.heaven.util.common.ArgUtil;
 
 import java.util.HashMap;
@@ -91,12 +92,12 @@ public final class CacheBs<K,V> {
      * @since 0.0.2
      */
     public ICache<K,V> build() {
-        CacheContext<K,V> context = new CacheContext<>();
-        context.cacheEvict(evict);
-        context.map(map);
-        context.size(size);
+        Cache<K,V> cache = new Cache<>();
+        cache.map(map);
+        cache.cacheEvict(evict);
+        cache.sizeLimit(size);
 
-        return new Cache<>(context);
+        return CacheProxy.getProxy(cache);
     }
 
 }

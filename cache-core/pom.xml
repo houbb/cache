@@ -23,6 +23,10 @@
             <groupId>com.github.houbb</groupId>
             <artifactId>heaven</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.houbb</groupId>
+            <artifactId>aop-core</artifactId>
+        </dependency>
 
         <!--============================== OTHER ==============================-->
     </dependencies>

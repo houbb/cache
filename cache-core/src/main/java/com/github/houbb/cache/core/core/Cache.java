@@ -1,5 +1,6 @@
 package com.github.houbb.cache.core.core;
 
+import com.github.houbb.cache.annotation.Refresh;
 import com.github.houbb.cache.api.*;
 import com.github.houbb.cache.core.exception.CacheRuntimeException;
 import com.github.houbb.cache.core.support.evict.CacheEvictContext;
@@ -21,32 +22,40 @@ public class Cache<K,V> implements ICache<K,V> {
      * map 信息
      * @since 0.0.2
      */
-    private final Map<K,V> map;
+    private Map<K,V> map;
 
     /**
      * 大小限制
      * @since 0.0.2
      */
-    private final int sizeLimit;
+    private int sizeLimit;
 
     /**
      * 驱除策略
      * @since 0.0.2
      */
-    private final ICacheEvict<K,V> cacheEvict;
+    private ICacheEvict<K,V> cacheEvict;
 
     /**
      * 过期策略
      * 暂时不做暴露
      * @since 0.0.3
      */
-    private final ICacheExpire<K,V> cacheExpire;
+    private ICacheExpire<K,V> cacheExpire = new CacheExpire<>(this);
 
-    public Cache(ICacheContext<K, V> context) {
-        this.map = context.map();
-        this.sizeLimit = context.size();
-        this.cacheEvict = context.cacheEvict();
-        this.cacheExpire = new CacheExpire<>(this);
+    public Cache<K, V> map(Map<K, V> map) {
+        this.map = map;
+        return this;
+    }
+
+    public Cache<K, V> sizeLimit(int sizeLimit) {
+        this.sizeLimit = sizeLimit;
+        return this;
+    }
+
+    public Cache<K, V> cacheEvict(ICacheEvict<K, V> cacheEvict) {
+        this.cacheEvict = cacheEvict;
+        return this;
     }
 
     @Override
@@ -62,34 +71,31 @@ public class Cache<K,V> implements ICache<K,V> {
     }
 
     @Override
-    public int size() {
-        //1. 刷新所有过期信息
-        this.refreshExpireAllKeys();
+    public ICacheExpire<K, V> cacheExpire() {
+        return this.cacheExpire;
+    }
 
+    @Override
+    @Refresh
+    public int size() {
         return map.size();
     }
 
     @Override
+    @Refresh
     public boolean isEmpty() {
-        //1. 刷新所有过期信息
-        this.refreshExpireAllKeys();
-
         return map.isEmpty();
     }
 
     @Override
+    @Refresh
     public boolean containsKey(Object key) {
-        //1. 刷新所有过期信息
-        this.refreshExpireAllKeys();
-
         return map.containsKey(key);
     }
 
     @Override
+    @Refresh
     public boolean containsValue(Object value) {
-        //1. 刷新所有过期信息
-        this.refreshExpireAllKeys();
-
         return map.containsValue(value);
     }
 
@@ -140,37 +146,27 @@ public class Cache<K,V> implements ICache<K,V> {
     }
 
     @Override
+    @Refresh
     public void clear() {
         map.clear();
     }
 
     @Override
+    @Refresh
     public Set<K> keySet() {
-        this.refreshExpireAllKeys();
-
         return map.keySet();
     }
 
     @Override
+    @Refresh
     public Collection<V> values() {
-        this.refreshExpireAllKeys();
-
         return map.values();
     }
 
     @Override
+    @Refresh
     public Set<Entry<K, V>> entrySet() {
-        this.refreshExpireAllKeys();
-
         return map.entrySet();
-    }
-
-    /**
-     * 刷新懒过期处理所有的 keys
-     * @since 0.0.3
-     */
-    private void refreshExpireAllKeys() {
-        this.cacheExpire.refreshExpire(map.keySet());
     }
 
 }

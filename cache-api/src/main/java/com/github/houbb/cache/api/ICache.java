@@ -57,4 +57,11 @@ public interface ICache<K, V> extends Map<K, V> {
      */
     ICache<K, V> expireAt(final K key, final long timeInMills);
 
+    /**
+     * 获取缓存的过期处理类
+     * @return 处理类实现
+     * @since 0.0.4
+     */
+    ICacheExpire<K,V> cacheExpire();
+
 }

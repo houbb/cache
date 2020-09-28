@@ -35,6 +35,7 @@
         <!--============================== INTER ==============================-->
         <heaven.version>0.1.115</heaven.version>
         <test.version>0.0.1</test.version>
+        <aop.version>0.0.3</aop.version>
 
         <!--============================== OTHER ==============================-->
         <junit.version>4.12</junit.version>
@@ -64,6 +65,11 @@
                 <groupId>com.github.houbb</groupId>
                 <artifactId>test-core</artifactId>
                 <version>${test.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.houbb</groupId>
+                <artifactId>aop-core</artifactId>
+                <version>${aop.version}</version>
             </dependency>
 
             <!--============================== OTHER ==============================-->
