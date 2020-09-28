@@ -5,7 +5,7 @@
     <parent>
         <artifactId>cache</artifactId>
         <groupId>com.github.houbb</groupId>
-        <version>0.0.4</version>
+        <version>0.0.5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -19,6 +19,10 @@
         </dependency>
 
         <!--============================== INTER ==============================-->
+        <dependency>
+            <groupId>com.github.houbb</groupId>
+            <artifactId>log-integration</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.github.houbb</groupId>
             <artifactId>heaven</artifactId>

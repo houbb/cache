@@ -2,13 +2,16 @@ package com.github.houbb.cache.core.bs;
 
 import com.github.houbb.cache.api.ICache;
 import com.github.houbb.cache.api.ICacheEvict;
+import com.github.houbb.cache.api.ICacheInterceptor;
 import com.github.houbb.cache.core.core.Cache;
 import com.github.houbb.cache.core.core.CacheContext;
 import com.github.houbb.cache.core.support.evict.CacheEvicts;
+import com.github.houbb.cache.core.support.interceptor.CacheInterceptors;
 import com.github.houbb.cache.core.support.proxy.CacheProxy;
 import com.github.houbb.heaven.util.common.ArgUtil;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**

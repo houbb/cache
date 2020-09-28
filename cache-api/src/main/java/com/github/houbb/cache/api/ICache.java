@@ -1,5 +1,6 @@
 package com.github.houbb.cache.api;
 
+import java.util.List;
 import java.util.Map;
 
 /**

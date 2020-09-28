@@ -34,6 +34,8 @@ Cache 用于实现一个可拓展的本地缓存。
 
 - 支持自定义 evict 驱除策略
 
+- 日志整合框架，自适应常见日志
+
 # 变更日志
 
 > [变更日志](https://github.com/houbb/cache/blob/master/doc/CHANGELOG.md)
@@ -52,7 +54,7 @@ Maven 3.X 及其以上版本
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>cache-core</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.5</version>
 </dependency>
 ```
 

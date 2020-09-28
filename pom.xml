@@ -6,7 +6,7 @@
     <groupId>com.github.houbb</groupId>
     <artifactId>cache</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.4</version>
+    <version>0.0.5</version>
     <modules>
         <module>cache-api</module>
         <module>cache-core</module>
@@ -36,6 +36,7 @@
         <heaven.version>0.1.115</heaven.version>
         <test.version>0.0.1</test.version>
         <aop.version>0.0.3</aop.version>
+        <log-integration.version>1.1.8</log-integration.version>
 
         <!--============================== OTHER ==============================-->
         <junit.version>4.12</junit.version>
@@ -56,6 +57,11 @@
             </dependency>
 
             <!--============================== INTER ==============================-->
+            <dependency>
+                <groupId>com.github.houbb</groupId>
+                <artifactId>log-integration</artifactId>
+                <version>${log-integration.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.github.houbb</groupId>
                 <artifactId>heaven</artifactId>

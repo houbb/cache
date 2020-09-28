@@ -1,6 +1,6 @@
 package com.github.houbb.cache.core.support.proxy.bs;
 
-import com.github.houbb.cache.annotation.Refresh;
+import com.github.houbb.cache.annotation.CacheInterceptor;
 import com.github.houbb.cache.api.ICache;
 
 import java.lang.reflect.Method;
@@ -12,11 +12,11 @@ import java.lang.reflect.Method;
 public interface ICacheProxyBsContext {
 
     /**
-     * 刷新信息
-     * @return 刷新
-     * @since 0.0.4
+     * 拦截器信息
+     * @return 拦截器
+     * @since 0.0.5
      */
-    Refresh refresh();
+    CacheInterceptor interceptor();
 
     /**
      * 获取代理对象信息
