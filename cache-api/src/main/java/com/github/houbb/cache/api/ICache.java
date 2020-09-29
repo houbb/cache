@@ -63,7 +63,7 @@ public interface ICache<K, V> extends Map<K, V> {
      * @return 处理类实现
      * @since 0.0.4
      */
-    ICacheExpire<K,V> cacheExpire();
+    ICacheExpire<K,V> expire();
 
     /**
      * 删除监听类列表
@@ -71,5 +71,12 @@ public interface ICache<K, V> extends Map<K, V> {
      * @since 0.0.6
      */
     List<ICacheRemoveListener<K,V>> removeListeners();
+
+    /**
+     * 加载信息
+     * @return 加载信息
+     * @since 0.0.7
+     */
+    ICacheLoad<K,V> load();
 
 }

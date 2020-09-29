@@ -3,7 +3,6 @@ package com.github.houbb.cache.core.support.interceptor.refresh;
 import com.github.houbb.cache.api.ICache;
 import com.github.houbb.cache.api.ICacheInterceptor;
 import com.github.houbb.cache.api.ICacheInterceptorContext;
-import com.github.houbb.cache.core.support.interceptor.common.CacheInterceptorCost;
 import com.github.houbb.log.integration.core.Log;
 import com.github.houbb.log.integration.core.LogFactory;
 
@@ -21,7 +20,7 @@ public class CacheInterceptorRefresh<K,V> implements ICacheInterceptor<K, V> {
     public void before(ICacheInterceptorContext<K,V> context) {
         log.debug("Refresh start");
         final ICache<K,V> cache = context.cache();
-        cache.cacheExpire().refreshExpire(cache.keySet());
+        cache.expire().refreshExpire(cache.keySet());
     }
 
     @Override

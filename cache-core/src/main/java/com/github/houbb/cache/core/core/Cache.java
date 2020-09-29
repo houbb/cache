@@ -43,13 +43,19 @@ public class Cache<K,V> implements ICache<K,V> {
      * 暂时不做暴露
      * @since 0.0.3
      */
-    private ICacheExpire<K,V> cacheExpire = new CacheExpire<>(this);
+    private ICacheExpire<K,V> expire = new CacheExpire<>(this);
 
     /**
      * 删除监听类
      * @since 0.0.6
      */
     private List<ICacheRemoveListener<K,V>> removeListeners;
+
+    /**
+     * 加载类
+     * @since 0.0.7
+     */
+    private ICacheLoad<K,V> load;
 
     /**
      * 设置 map 实现
@@ -91,6 +97,24 @@ public class Cache<K,V> implements ICache<K,V> {
         return this;
     }
 
+    @Override
+    public ICacheLoad<K, V> load() {
+        return load;
+    }
+
+    public Cache<K, V> load(ICacheLoad<K, V> load) {
+        this.load = load;
+        return this;
+    }
+
+    /**
+     * 初始化
+     * @since 0.0.7
+     */
+    public void init() {
+        this.load.load(this);
+    }
+
     /**
      * 设置过期策略
      * @param key         key
@@ -107,14 +131,14 @@ public class Cache<K,V> implements ICache<K,V> {
     @Override
     @CacheInterceptor
     public ICache<K, V> expireAt(K key, long timeInMills) {
-        this.cacheExpire.expire(key, timeInMills);
+        this.expire.expire(key, timeInMills);
         return this;
     }
 
     @Override
     @CacheInterceptor
-    public ICacheExpire<K, V> cacheExpire() {
-        return this.cacheExpire;
+    public ICacheExpire<K, V> expire() {
+        return this.expire;
     }
 
     @Override
@@ -147,7 +171,7 @@ public class Cache<K,V> implements ICache<K,V> {
     public V get(Object key) {
         //1. 刷新所有过期信息
         K genericKey = (K) key;
-        this.cacheExpire.refreshExpire(Collections.singletonList(genericKey));
+        this.expire.refreshExpire(Collections.singletonList(genericKey));
 
         return map.get(key);
     }

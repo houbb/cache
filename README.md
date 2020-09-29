@@ -156,11 +156,45 @@ cache.put("2", "2");
 【删除提示】可恶，我竟然被删除了！2
 ```
 
+# 添加 load 加载器
+
+## 说明
+
+有时候我们需要在 cache 初始化的时候，添加对应的数据初始化。
+
+后期可以从文件等地方加载数据。
+
+## 实现
+
+实现 `ICacheLoad` 接口即可。
+
+```java
+public class MyCacheLoad implements ICacheLoad<String,String> {
+
+    @Override
+    public void load(ICache<String, String> cache) {
+        cache.put("1", "1");
+        cache.put("2", "2");
+    }
+
+}
+```
+
+我们在缓存初始化的时候，放入 2 个元素。
+
+## 测试效果
+
+```java
+ICache<String, String> cache = CacheBs.<String,String>newInstance()
+        .load(new MyCacheLoad())
+        .build();
+
+Assert.assertEquals(2, cache.size());
+```
+
 # 后期 Road-MAP
 
 - [ ] 添加 persist 持久化
-
-- [ ] 添加 load 加载
 
 - [ ] 耗时统计，慢日志统计
 

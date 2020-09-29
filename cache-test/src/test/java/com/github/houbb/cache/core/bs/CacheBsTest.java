@@ -2,6 +2,7 @@ package com.github.houbb.cache.core.bs;
 
 import com.github.houbb.cache.api.ICache;
 import com.github.houbb.cache.core.listener.MyRemoveListener;
+import com.github.houbb.cache.core.load.MyCacheLoad;
 import com.github.houbb.cache.core.support.evict.CacheEvicts;
 import com.github.houbb.cache.core.support.map.Maps;
 import org.junit.Assert;
@@ -90,6 +91,19 @@ public class CacheBsTest {
 
         cache.put("1", "1");
         cache.put("2", "2");
+    }
+
+    /**
+     * 加载接口测试
+     * @since 0.0.7
+     */
+    @Test
+    public void loadTest() {
+        ICache<String, String> cache = CacheBs.<String,String>newInstance()
+                .load(new MyCacheLoad())
+                .build();
+
+        Assert.assertEquals(2, cache.size());
     }
 
 }

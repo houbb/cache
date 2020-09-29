@@ -1,15 +1,13 @@
 package com.github.houbb.cache.core.bs;
 
-import com.github.houbb.cache.api.ICache;
-import com.github.houbb.cache.api.ICacheEvict;
-import com.github.houbb.cache.api.ICacheInterceptor;
-import com.github.houbb.cache.api.ICacheRemoveListener;
+import com.github.houbb.cache.api.*;
 import com.github.houbb.cache.core.core.Cache;
 import com.github.houbb.cache.core.core.CacheContext;
 import com.github.houbb.cache.core.support.evict.CacheEvicts;
 import com.github.houbb.cache.core.support.interceptor.CacheInterceptors;
 import com.github.houbb.cache.core.support.listener.CacheRemoveListener;
 import com.github.houbb.cache.core.support.listener.CacheRemoveListeners;
+import com.github.houbb.cache.core.support.load.CacheLoads;
 import com.github.houbb.cache.core.support.proxy.CacheProxy;
 import com.github.houbb.heaven.util.common.ArgUtil;
 
@@ -63,6 +61,12 @@ public final class CacheBs<K,V> {
     private List<ICacheRemoveListener<K,V>> removeListeners = CacheRemoveListeners.defaults();
 
     /**
+     * 加载策略
+     * @since 0.0.7
+     */
+    private ICacheLoad<K,V> load = CacheLoads.none();
+
+    /**
      * map 实现
      * @param map map
      * @return this
@@ -102,6 +106,19 @@ public final class CacheBs<K,V> {
     }
 
     /**
+     * 设置加载
+     * @param load 加载
+     * @return this
+     * @since 0.0.7
+     */
+    public CacheBs<K, V> load(ICacheLoad<K, V> load) {
+        ArgUtil.notNull(load, "load");
+
+        this.load = load;
+        return this;
+    }
+
+    /**
      * 添加删除监听器
      * @param listener 监听器
      * @return this
@@ -114,7 +131,6 @@ public final class CacheBs<K,V> {
         return this;
     }
 
-
     /**
      * 构建缓存信息
      * @return 缓存信息
@@ -126,7 +142,10 @@ public final class CacheBs<K,V> {
         cache.cacheEvict(evict);
         cache.sizeLimit(size);
         cache.removeListeners(removeListeners);
+        cache.load(load);
 
+        // 初始化
+        cache.init();
         return CacheProxy.getProxy(cache);
     }
 
