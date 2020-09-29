@@ -13,7 +13,8 @@ public interface ICacheEvict<K, V> {
      *
      * @param context 上下文
      * @since 0.0.2
+     * @return 是否执行驱除
      */
-    void evict(final ICacheEvictContext<K, V> context);
+    boolean evict(final ICacheEvictContext<K, V> context);
 
 }

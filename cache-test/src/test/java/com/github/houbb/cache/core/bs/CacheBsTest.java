@@ -1,6 +1,7 @@
 package com.github.houbb.cache.core.bs;
 
 import com.github.houbb.cache.api.ICache;
+import com.github.houbb.cache.core.listener.MyRemoveListener;
 import com.github.houbb.cache.core.support.evict.CacheEvicts;
 import com.github.houbb.cache.core.support.map.Maps;
 import org.junit.Assert;
@@ -74,6 +75,21 @@ public class CacheBsTest {
         TimeUnit.MILLISECONDS.sleep(50);
         Assert.assertEquals(1, cache.size());
         System.out.println(cache.keySet());
+    }
+
+    /**
+     * 缓存删除监听器
+     * @since 0.0.6
+     */
+    @Test
+    public void cacheRemoveListenerTest() {
+        ICache<String, String> cache = CacheBs.<String,String>newInstance()
+                .size(1)
+                .addRemoveListener(new MyRemoveListener<String, String>())
+                .build();
+
+        cache.put("1", "1");
+        cache.put("2", "2");
     }
 
 }

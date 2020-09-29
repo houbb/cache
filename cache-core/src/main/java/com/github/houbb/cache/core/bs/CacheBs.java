@@ -3,13 +3,17 @@ package com.github.houbb.cache.core.bs;
 import com.github.houbb.cache.api.ICache;
 import com.github.houbb.cache.api.ICacheEvict;
 import com.github.houbb.cache.api.ICacheInterceptor;
+import com.github.houbb.cache.api.ICacheRemoveListener;
 import com.github.houbb.cache.core.core.Cache;
 import com.github.houbb.cache.core.core.CacheContext;
 import com.github.houbb.cache.core.support.evict.CacheEvicts;
 import com.github.houbb.cache.core.support.interceptor.CacheInterceptors;
+import com.github.houbb.cache.core.support.listener.CacheRemoveListener;
+import com.github.houbb.cache.core.support.listener.CacheRemoveListeners;
 import com.github.houbb.cache.core.support.proxy.CacheProxy;
 import com.github.houbb.heaven.util.common.ArgUtil;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +57,12 @@ public final class CacheBs<K,V> {
     private ICacheEvict<K,V> evict = CacheEvicts.fifo();
 
     /**
+     * 删除监听类
+     * @since 0.0.6
+     */
+    private List<ICacheRemoveListener<K,V>> removeListeners = CacheRemoveListeners.defaults();
+
+    /**
      * map 实现
      * @param map map
      * @return this
@@ -85,9 +95,25 @@ public final class CacheBs<K,V> {
      * @since 0.0.2
      */
     public CacheBs<K, V> evict(ICacheEvict<K, V> evict) {
+        ArgUtil.notNull(evict, "evict");
+
         this.evict = evict;
         return this;
     }
+
+    /**
+     * 添加删除监听器
+     * @param listener 监听器
+     * @return this
+     * @since 0.0.6
+     */
+    public CacheBs<K, V> addRemoveListener(ICacheRemoveListener<K,V> listener) {
+        ArgUtil.notNull(listener, "listener");
+
+        this.removeListeners.add(listener);
+        return this;
+    }
+
 
     /**
      * 构建缓存信息
@@ -99,6 +125,7 @@ public final class CacheBs<K,V> {
         cache.map(map);
         cache.cacheEvict(evict);
         cache.sizeLimit(size);
+        cache.removeListeners(removeListeners);
 
         return CacheProxy.getProxy(cache);
     }

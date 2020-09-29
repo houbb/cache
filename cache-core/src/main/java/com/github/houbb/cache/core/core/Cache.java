@@ -2,9 +2,11 @@ package com.github.houbb.cache.core.core;
 
 import com.github.houbb.cache.annotation.CacheInterceptor;
 import com.github.houbb.cache.api.*;
+import com.github.houbb.cache.core.constant.enums.CacheRemoveType;
 import com.github.houbb.cache.core.exception.CacheRuntimeException;
 import com.github.houbb.cache.core.support.evict.CacheEvictContext;
 import com.github.houbb.cache.core.support.expire.CacheExpire;
+import com.github.houbb.cache.core.support.listener.CacheRemoveListenerContext;
 
 import java.util.*;
 
@@ -44,6 +46,12 @@ public class Cache<K,V> implements ICache<K,V> {
     private ICacheExpire<K,V> cacheExpire = new CacheExpire<>(this);
 
     /**
+     * 删除监听类
+     * @since 0.0.6
+     */
+    private List<ICacheRemoveListener<K,V>> removeListeners;
+
+    /**
      * 设置 map 实现
      * @param map 实现
      * @return this
@@ -70,6 +78,16 @@ public class Cache<K,V> implements ICache<K,V> {
      */
     public Cache<K, V> cacheEvict(ICacheEvict<K, V> cacheEvict) {
         this.cacheEvict = cacheEvict;
+        return this;
+    }
+
+    @Override
+    public List<ICacheRemoveListener<K, V>> removeListeners() {
+        return removeListeners;
+    }
+
+    public Cache<K, V> removeListeners(List<ICacheRemoveListener<K, V>> removeListeners) {
+        this.removeListeners = removeListeners;
         return this;
     }
 
@@ -140,7 +158,14 @@ public class Cache<K,V> implements ICache<K,V> {
         //1.1 尝试驱除
         CacheEvictContext<K,V> context = new CacheEvictContext<>();
         context.key(key).size(sizeLimit).cache(this);
-        cacheEvict.evict(context);
+        boolean evictResult = cacheEvict.evict(context);
+        if(evictResult) {
+            // 执行淘汰监听器
+            ICacheRemoveListenerContext<K,V> removeListenerContext = CacheRemoveListenerContext.<K,V>newInstance().key(key).value(value).type(CacheRemoveType.EVICT.code());
+            for(ICacheRemoveListener<K,V> listener : this.removeListeners) {
+                listener.listen(removeListenerContext);
+            }
+        }
 
         //2. 判断驱除后的信息
         if(isSizeLimit()) {

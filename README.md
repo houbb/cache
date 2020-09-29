@@ -28,11 +28,13 @@ Cache 用于实现一个可拓展的本地缓存。
 
 - 支持 cache 固定大小
 
-- 支持 expire 过期特性
-
 - 支持自定义 map 实现策略
 
+- 支持 expire 过期特性
+
 - 支持自定义 evict 驱除策略
+
+- 支持自定义删除监听器
 
 - 日志整合框架，自适应常见日志
 
@@ -54,7 +56,7 @@ Maven 3.X 及其以上版本
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>cache-core</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.6</version>
 </dependency>
 ```
 
@@ -113,15 +115,56 @@ System.out.println(cache.keySet());
 
 `cache.expire("1", 10);` 指定对应的 key 在 10ms 后过期。
 
-# 后期 Road-MAP
+# 删除监听器
 
-- [ ] CRUD 监听类
+## 说明
+
+淘汰和过期，这些都是缓存的内部行为。
+
+如果用户也关心的话，可以自定义删除监听器。
+
+## 自定义监听器
+
+直接实现 `ICacheRemoveListener` 接口即可。
+
+```java
+public class MyRemoveListener<K,V> implements ICacheRemoveListener<K,V> {
+
+    @Override
+    public void listen(ICacheRemoveListenerContext<K, V> context) {
+        System.out.println("【删除提示】可恶，我竟然被删除了！" + context.key());
+    }
+
+}
+```
+
+## 使用
+
+```java
+ICache<String, String> cache = CacheBs.<String,String>newInstance()
+        .size(1)
+        .addRemoveListener(new MyRemoveListener<String, String>())
+        .build();
+
+cache.put("1", "1");
+cache.put("2", "2");
+```
+
+- 测试日志
+
+```
+【删除提示】可恶，我竟然被删除了！2
+```
+
+# 后期 Road-MAP
 
 - [ ] 添加 persist 持久化
 
 - [ ] 添加 load 加载
 
 - [ ] 耗时统计，慢日志统计
+
+- [ ] 并发安全保障
 
 - [ ] spring 整合
 
