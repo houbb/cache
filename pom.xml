@@ -115,7 +115,7 @@
 
     <!--============================== ADD For sonatype START ==============================-->
     <name>cache</name>
-    <description>cache is a java bean copy tool.</description>
+    <description>The cache tool for java.</description>
 
     <parent>
         <groupId>org.sonatype.oss</groupId>
