@@ -1,6 +1,6 @@
 # 项目简介
 
-Cache 用于实现一个可拓展的本地缓存。
+[Cache](https://github.com/houbb/cache) 用于实现一个可拓展的本地缓存。
 
 有人的地方，就有江湖。
 
@@ -8,7 +8,6 @@ Cache 用于实现一个可拓展的本地缓存。
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.houbb/cache/badge.svg)](http://mvnrepository.com/artifact/com.github.houbb/cache)
 [![Build Status](https://www.travis-ci.org/houbb/cache.svg?branch=master)](https://www.travis-ci.org/houbb/cache?branch=master)
-[![Coverage Status](https://coveralls.io/repos/github/houbb/cache/badge.svg?branch=master)](https://coveralls.io/github/houbb/cache?branch=master)
 [![](https://img.shields.io/badge/license-Apache2-FF0080.svg)](https://github.com/houbb/cache/blob/master/LICENSE.txt)
 [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/houbb/cache)
 
@@ -253,6 +252,10 @@ Assert.assertEquals(2, cache.size());
 
 - [ ] spring 整合
 
+提供 `@Cacheable` 系列注解
+
 - [ ] 文件压缩
 
-提供 `@Cacheable` 系列注解
+- [ ] 独立服务端
+
+提供类似于 redis-server + redis-client 的拆分，便于独立于应用作为服务存在。
