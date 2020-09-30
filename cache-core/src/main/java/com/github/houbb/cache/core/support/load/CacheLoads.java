@@ -23,5 +23,16 @@ public final class CacheLoads {
         return new CacheLoadNone<>();
     }
 
+    /**
+     * 文件 JSON
+     * @param dbPath 文件路径
+     * @param <K> key
+     * @param <V> value
+     * @return 值
+     * @since 0.0.8
+     */
+    public static <K,V> ICacheLoad<K,V> dbJson(final String dbPath) {
+        return new CacheLoadDbJson<>(dbPath);
+    }
 
 }

@@ -38,6 +38,8 @@ Cache 用于实现一个可拓展的本地缓存。
 
 - 日志整合框架，自适应常见日志
 
+- 支持 load 初始化和 persist 持久化
+
 # 变更日志
 
 > [变更日志](https://github.com/houbb/cache/blob/master/doc/CHANGELOG.md)
@@ -56,7 +58,7 @@ Maven 3.X 及其以上版本
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>cache-core</artifactId>
-    <version>0.0.6</version>
+    <version>0.0.8</version>
 </dependency>
 ```
 
@@ -192,14 +194,65 @@ ICache<String, String> cache = CacheBs.<String,String>newInstance()
 Assert.assertEquals(2, cache.size());
 ```
 
+# 添加 persist 持久化类
+
+## 说明
+
+如果我们只是把文件放在内存中，应用重启信息就丢失了。
+
+有时候我们希望这些 key/value 信息可以持久化，存储到文件或者 database 中。
+
+## 持久化
+
+`CachePersists.<String, String>dbJson("1.rdb")` 指定将数据文件持久化到文件中。
+
+定期执行，暂时全量持久化的间隔为 10min，后期考虑支持更多配置。
+
+```java
+public void persistTest() throws InterruptedException {
+    ICache<String, String> cache = CacheBs.<String,String>newInstance()
+            .load(new MyCacheLoad())
+            .persist(CachePersists.<String, String>dbJson("1.rdb"))
+            .build();
+
+    Assert.assertEquals(2, cache.size());
+    TimeUnit.SECONDS.sleep(5);
+}
+```
+
+- 1.rdb
+
+文件内容如下：
+
+```
+{"key":"2","value":"2"}
+{"key":"1","value":"1"}
+```
+
+## 加载器
+
+存储之后，可以使用对应的加载器读取文件内容：
+
+```java
+ICache<String, String> cache = CacheBs.<String,String>newInstance()
+        .load(CacheLoads.<String, String>dbJson("1.rdb"))
+        .build();
+
+Assert.assertEquals(2, cache.size());
+```
+
 # 后期 Road-MAP
 
-- [ ] 添加 persist 持久化
+- [ ] 添加 persist AOF 持久化
 
-- [ ] 耗时统计，慢日志统计
+- [ ] 慢日志统计
+
+- [ ] 优化过期的判断逻辑
 
 - [ ] 并发安全保障
 
 - [ ] spring 整合
+
+- [ ] 文件压缩
 
 提供 `@Cacheable` 系列注解

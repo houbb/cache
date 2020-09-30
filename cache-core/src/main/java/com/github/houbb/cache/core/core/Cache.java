@@ -7,6 +7,7 @@ import com.github.houbb.cache.core.exception.CacheRuntimeException;
 import com.github.houbb.cache.core.support.evict.CacheEvictContext;
 import com.github.houbb.cache.core.support.expire.CacheExpire;
 import com.github.houbb.cache.core.support.listener.CacheRemoveListenerContext;
+import com.github.houbb.cache.core.support.persist.InnerCachePersist;
 
 import java.util.*;
 
@@ -36,14 +37,14 @@ public class Cache<K,V> implements ICache<K,V> {
      * 驱除策略
      * @since 0.0.2
      */
-    private ICacheEvict<K,V> cacheEvict;
+    private ICacheEvict<K,V> evict;
 
     /**
      * 过期策略
      * 暂时不做暴露
      * @since 0.0.3
      */
-    private ICacheExpire<K,V> expire = new CacheExpire<>(this);
+    private ICacheExpire<K,V> expire;
 
     /**
      * 删除监听类
@@ -56,6 +57,12 @@ public class Cache<K,V> implements ICache<K,V> {
      * @since 0.0.7
      */
     private ICacheLoad<K,V> load;
+
+    /**
+     * 持久化
+     * @since 0.0.8
+     */
+    private ICachePersist<K,V> persist;
 
     /**
      * 设置 map 实现
@@ -81,9 +88,21 @@ public class Cache<K,V> implements ICache<K,V> {
      * 设置驱除策略
      * @param cacheEvict 驱除策略
      * @return this
+     * @since 0.0.8
      */
-    public Cache<K, V> cacheEvict(ICacheEvict<K, V> cacheEvict) {
-        this.cacheEvict = cacheEvict;
+    public Cache<K, V> evict(ICacheEvict<K, V> cacheEvict) {
+        this.evict = cacheEvict;
+        return this;
+    }
+
+    /**
+     * 设置持久化策略
+     * @param persist 持久化
+     * @return this
+     * @since 0.0.8
+     */
+    public Cache<K, V> persist(ICachePersist<K, V> persist) {
+        this.persist = persist;
         return this;
     }
 
@@ -113,6 +132,12 @@ public class Cache<K,V> implements ICache<K,V> {
      */
     public void init() {
         this.load.load(this);
+        this.expire = new CacheExpire<>(this);
+
+        // 初始化持久化
+        if(this.persist != null) {
+            new InnerCachePersist<>(this, persist);
+        }
     }
 
     /**
@@ -182,7 +207,7 @@ public class Cache<K,V> implements ICache<K,V> {
         //1.1 尝试驱除
         CacheEvictContext<K,V> context = new CacheEvictContext<>();
         context.key(key).size(sizeLimit).cache(this);
-        boolean evictResult = cacheEvict.evict(context);
+        boolean evictResult = evict.evict(context);
         if(evictResult) {
             // 执行淘汰监听器
             ICacheRemoveListenerContext<K,V> removeListenerContext = CacheRemoveListenerContext.<K,V>newInstance().key(key).value(value).type(CacheRemoveType.EVICT.code());

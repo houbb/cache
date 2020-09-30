@@ -2,16 +2,13 @@ package com.github.houbb.cache.core.bs;
 
 import com.github.houbb.cache.api.*;
 import com.github.houbb.cache.core.core.Cache;
-import com.github.houbb.cache.core.core.CacheContext;
 import com.github.houbb.cache.core.support.evict.CacheEvicts;
-import com.github.houbb.cache.core.support.interceptor.CacheInterceptors;
-import com.github.houbb.cache.core.support.listener.CacheRemoveListener;
 import com.github.houbb.cache.core.support.listener.CacheRemoveListeners;
 import com.github.houbb.cache.core.support.load.CacheLoads;
+import com.github.houbb.cache.core.support.persist.CachePersists;
 import com.github.houbb.cache.core.support.proxy.CacheProxy;
 import com.github.houbb.heaven.util.common.ArgUtil;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +62,12 @@ public final class CacheBs<K,V> {
      * @since 0.0.7
      */
     private ICacheLoad<K,V> load = CacheLoads.none();
+
+    /**
+     * 持久化实现策略
+     * @since 0.0.8
+     */
+    private ICachePersist<K,V> persist = CachePersists.none();
 
     /**
      * map 实现
@@ -132,6 +135,17 @@ public final class CacheBs<K,V> {
     }
 
     /**
+     * 设置持久化策略
+     * @param persist 持久化
+     * @return this
+     * @since 0.0.8
+     */
+    public CacheBs<K, V> persist(ICachePersist<K, V> persist) {
+        this.persist = persist;
+        return this;
+    }
+
+    /**
      * 构建缓存信息
      * @return 缓存信息
      * @since 0.0.2
@@ -139,10 +153,11 @@ public final class CacheBs<K,V> {
     public ICache<K,V> build() {
         Cache<K,V> cache = new Cache<>();
         cache.map(map);
-        cache.cacheEvict(evict);
+        cache.evict(evict);
         cache.sizeLimit(size);
         cache.removeListeners(removeListeners);
         cache.load(load);
+        cache.persist(persist);
 
         // 初始化
         cache.init();

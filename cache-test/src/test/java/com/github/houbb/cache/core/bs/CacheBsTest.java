@@ -4,7 +4,9 @@ import com.github.houbb.cache.api.ICache;
 import com.github.houbb.cache.core.listener.MyRemoveListener;
 import com.github.houbb.cache.core.load.MyCacheLoad;
 import com.github.houbb.cache.core.support.evict.CacheEvicts;
+import com.github.houbb.cache.core.support.load.CacheLoads;
 import com.github.houbb.cache.core.support.map.Maps;
+import com.github.houbb.cache.core.support.persist.CachePersists;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -101,6 +103,34 @@ public class CacheBsTest {
     public void loadTest() {
         ICache<String, String> cache = CacheBs.<String,String>newInstance()
                 .load(new MyCacheLoad())
+                .build();
+
+        Assert.assertEquals(2, cache.size());
+    }
+
+    /**
+     * 持久化接口测试
+     * @since 0.0.7
+     */
+    @Test
+    public void persistTest() throws InterruptedException {
+        ICache<String, String> cache = CacheBs.<String,String>newInstance()
+                .load(new MyCacheLoad())
+                .persist(CachePersists.<String, String>dbJson("1.rdb"))
+                .build();
+
+        Assert.assertEquals(2, cache.size());
+        TimeUnit.SECONDS.sleep(5);
+    }
+
+    /**
+     * 加载接口测试
+     * @since 0.0.8
+     */
+    @Test
+    public void loadDbJsonTest() {
+        ICache<String, String> cache = CacheBs.<String,String>newInstance()
+                .load(CacheLoads.<String, String>dbJson("1.rdb"))
                 .build();
 
         Assert.assertEquals(2, cache.size());
