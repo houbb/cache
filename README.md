@@ -306,6 +306,10 @@ Assert.assertEquals(2, cache.size());
 
 # 后期 Road-MAP
 
+## 优化
+
+- [ ] 过期策略添加随机返回
+
 ## 淘汰策略
 
 - [ ] LRU
@@ -321,8 +325,6 @@ Assert.assertEquals(2, cache.size());
 ## 统计
 
 - [ ] 命中率
-
-- [ ] 优化过期的判断逻辑
 
 ## 并发
 
@@ -347,3 +349,5 @@ Assert.assertEquals(2, cache.size());
 [java从零手写实现redis（三）redis expire 过期原理](https://mp.weixin.qq.com/s/BWfBc98oLqhAPLN2Hgkwow)
 
 [java从零手写实现redis（三）内存数据如何重启不丢失？](https://mp.weixin.qq.com/s/G41SRZQm1_0uQXBAGHAYbw)
+
+[java从零手写实现redis（四）添加监听器](https://mp.weixin.qq.com/s/6pIG3l_wkXBwSuJvj_KwMA)
