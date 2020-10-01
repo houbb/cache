@@ -57,7 +57,7 @@ Maven 3.X 及其以上版本
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>cache-core</artifactId>
-    <version>0.0.8</version>
+    <version>0.0.9</version>
 </dependency>
 ```
 
@@ -306,13 +306,29 @@ Assert.assertEquals(2, cache.size());
 
 # 后期 Road-MAP
 
+## 淘汰策略
+
+- [ ] LRU
+
+- [ ] LFU
+
+## 持久化
+
 - [ ] 添加 persist AOF 持久化
 
-- [ ] 慢日志统计
+- [ ] AOF 混合 RDB
+
+## 统计
+
+- [ ] 命中率
 
 - [ ] 优化过期的判断逻辑
 
+## 并发
+
 - [ ] 并发安全保障
+
+## 其他
 
 - [ ] spring 整合
 
