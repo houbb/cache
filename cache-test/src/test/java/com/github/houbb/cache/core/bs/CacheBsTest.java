@@ -2,8 +2,10 @@ package com.github.houbb.cache.core.bs;
 
 import com.github.houbb.cache.api.ICache;
 import com.github.houbb.cache.core.listener.MyRemoveListener;
+import com.github.houbb.cache.core.listener.MySlowListener;
 import com.github.houbb.cache.core.load.MyCacheLoad;
 import com.github.houbb.cache.core.support.evict.CacheEvicts;
+import com.github.houbb.cache.core.support.listener.slow.CacheSlowListeners;
 import com.github.houbb.cache.core.support.load.CacheLoads;
 import com.github.houbb.cache.core.support.map.Maps;
 import com.github.houbb.cache.core.support.persist.CachePersists;
@@ -134,6 +136,20 @@ public class CacheBsTest {
                 .build();
 
         Assert.assertEquals(2, cache.size());
+    }
+
+    /**
+     * 慢日志接口测试
+     * @since 0.0.9
+     */
+    @Test
+    public void slowLogTest() {
+        ICache<String, String> cache = CacheBs.<String,String>newInstance()
+                .addSlowListener(new MySlowListener())
+                .build();
+
+        cache.put("1", "2");
+        cache.get("1");
     }
 
 }

@@ -6,7 +6,7 @@ import com.github.houbb.cache.core.constant.enums.CacheRemoveType;
 import com.github.houbb.cache.core.exception.CacheRuntimeException;
 import com.github.houbb.cache.core.support.evict.CacheEvictContext;
 import com.github.houbb.cache.core.support.expire.CacheExpire;
-import com.github.houbb.cache.core.support.listener.CacheRemoveListenerContext;
+import com.github.houbb.cache.core.support.listener.remove.CacheRemoveListenerContext;
 import com.github.houbb.cache.core.support.persist.InnerCachePersist;
 
 import java.util.*;
@@ -51,6 +51,12 @@ public class Cache<K,V> implements ICache<K,V> {
      * @since 0.0.6
      */
     private List<ICacheRemoveListener<K,V>> removeListeners;
+
+    /**
+     * 慢日志监听类
+     * @since 0.0.9
+     */
+    private List<ICacheSlowListener> slowListeners;
 
     /**
      * 加载类
@@ -98,12 +104,10 @@ public class Cache<K,V> implements ICache<K,V> {
     /**
      * 设置持久化策略
      * @param persist 持久化
-     * @return this
      * @since 0.0.8
      */
-    public Cache<K, V> persist(ICachePersist<K, V> persist) {
+    public void persist(ICachePersist<K, V> persist) {
         this.persist = persist;
-        return this;
     }
 
     @Override
@@ -113,6 +117,17 @@ public class Cache<K,V> implements ICache<K,V> {
 
     public Cache<K, V> removeListeners(List<ICacheRemoveListener<K, V>> removeListeners) {
         this.removeListeners = removeListeners;
+        return this;
+    }
+
+
+    @Override
+    public List<ICacheSlowListener> slowListeners() {
+        return slowListeners;
+    }
+
+    public Cache<K, V> slowListeners(List<ICacheSlowListener> slowListeners) {
+        this.slowListeners = slowListeners;
         return this;
     }
 

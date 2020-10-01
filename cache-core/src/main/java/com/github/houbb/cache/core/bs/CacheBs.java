@@ -3,7 +3,8 @@ package com.github.houbb.cache.core.bs;
 import com.github.houbb.cache.api.*;
 import com.github.houbb.cache.core.core.Cache;
 import com.github.houbb.cache.core.support.evict.CacheEvicts;
-import com.github.houbb.cache.core.support.listener.CacheRemoveListeners;
+import com.github.houbb.cache.core.support.listener.remove.CacheRemoveListeners;
+import com.github.houbb.cache.core.support.listener.slow.CacheSlowListeners;
 import com.github.houbb.cache.core.support.load.CacheLoads;
 import com.github.houbb.cache.core.support.persist.CachePersists;
 import com.github.houbb.cache.core.support.proxy.CacheProxy;
@@ -55,7 +56,13 @@ public final class CacheBs<K,V> {
      * 删除监听类
      * @since 0.0.6
      */
-    private List<ICacheRemoveListener<K,V>> removeListeners = CacheRemoveListeners.defaults();
+    private final List<ICacheRemoveListener<K,V>> removeListeners = CacheRemoveListeners.defaults();
+
+    /**
+     * 慢操作监听类
+     * @since 0.0.9
+     */
+    private final List<ICacheSlowListener> slowListeners = CacheSlowListeners.none();
 
     /**
      * 加载策略
@@ -123,14 +130,27 @@ public final class CacheBs<K,V> {
 
     /**
      * 添加删除监听器
-     * @param listener 监听器
+     * @param removeListener 监听器
      * @return this
      * @since 0.0.6
      */
-    public CacheBs<K, V> addRemoveListener(ICacheRemoveListener<K,V> listener) {
-        ArgUtil.notNull(listener, "listener");
+    public CacheBs<K, V> addRemoveListener(ICacheRemoveListener<K,V> removeListener) {
+        ArgUtil.notNull(removeListener, "removeListener");
 
-        this.removeListeners.add(listener);
+        this.removeListeners.add(removeListener);
+        return this;
+    }
+
+    /**
+     * 添加慢日志监听器
+     * @param slowListener 监听器
+     * @return this
+     * @since 0.0.9
+     */
+    public CacheBs<K, V> addSlowListener(ICacheSlowListener slowListener) {
+        ArgUtil.notNull(slowListener, "slowListener");
+
+        this.slowListeners.add(slowListener);
         return this;
     }
 
@@ -158,6 +178,7 @@ public final class CacheBs<K,V> {
         cache.removeListeners(removeListeners);
         cache.load(load);
         cache.persist(persist);
+        cache.slowListeners(slowListeners);
 
         // 初始化
         cache.init();

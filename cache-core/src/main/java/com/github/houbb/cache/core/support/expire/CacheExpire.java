@@ -5,7 +5,7 @@ import com.github.houbb.cache.api.ICacheExpire;
 import com.github.houbb.cache.api.ICacheRemoveListener;
 import com.github.houbb.cache.api.ICacheRemoveListenerContext;
 import com.github.houbb.cache.core.constant.enums.CacheRemoveType;
-import com.github.houbb.cache.core.support.listener.CacheRemoveListenerContext;
+import com.github.houbb.cache.core.support.listener.remove.CacheRemoveListenerContext;
 import com.github.houbb.heaven.util.util.CollectionUtil;
 import com.github.houbb.heaven.util.util.MapUtil;
 

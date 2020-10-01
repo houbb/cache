@@ -157,6 +157,70 @@ cache.put("2", "2");
 【删除提示】可恶，我竟然被删除了！2
 ```
 
+# 添加慢操作监听器
+
+## 说明
+
+redis 中会存储慢操作的相关日志信息，主要是由两个参数构成：
+
+（1）slowlog-log-slower-than 预设阈值,它的单位是毫秒(1秒=1000000微秒)默认值是10000
+
+（2）slowlog-max-len 最多存储多少条的慢日志记录
+
+不过 redis 是直接存储到内存中，而且有长度限制。
+
+根据实际工作体验，如果我们可以添加慢日志的监听，然后有对应的存储或者报警，这样更加方便问题的分析和快速反馈。
+
+所以我们引入类似于删除的监听器。
+
+## 自定义监听器
+
+实现接口 `ICacheSlowListener`
+
+这里每一个监听器都可以指定自己的慢日志阈值，便于分级处理。
+
+```java
+public class MySlowListener implements ICacheSlowListener {
+
+    @Override
+    public void listen(ICacheSlowListenerContext context) {
+        System.out.println("【慢日志】name: " + context.methodName());
+    }
+
+    @Override
+    public long slowerThanMills() {
+        return 0;
+    }
+
+}
+```
+
+## 使用
+
+```java
+ICache<String, String> cache = CacheBs.<String,String>newInstance()
+        .addSlowListener(new MySlowListener())
+        .build();
+
+cache.put("1", "2");
+cache.get("1");
+```
+
+- 测试效果
+
+```
+[DEBUG] [2020-09-30 17:40:11.547] [main] [c.g.h.c.c.s.i.c.CacheInterceptorCost.before] - Cost start, method: put
+[DEBUG] [2020-09-30 17:40:11.551] [main] [c.g.h.c.c.s.i.c.CacheInterceptorCost.after] - Cost end, method: put, cost: 10ms
+【慢日志】name: put
+[DEBUG] [2020-09-30 17:40:11.554] [main] [c.g.h.c.c.s.i.c.CacheInterceptorCost.before] - Cost start, method: get
+[DEBUG] [2020-09-30 17:40:11.554] [main] [c.g.h.c.c.s.i.c.CacheInterceptorCost.after] - Cost end, method: get, cost: 1ms
+【慢日志】name: get
+```
+
+实际工作中，我们可以针对慢日志数据存储，便于后期分析。
+
+也可以直接接入报警系统，及时反馈问题。
+
 # 添加 load 加载器
 
 ## 说明
@@ -259,3 +323,11 @@ Assert.assertEquals(2, cache.size());
 - [ ] 独立服务端
 
 提供类似于 redis-server + redis-client 的拆分，便于独立于应用作为服务存在。
+
+# 拓展阅读
+
+[java从零手写实现redis（一）如何实现固定大小的缓存？](https://mp.weixin.qq.com/s/6J2K2k4Db_20eGU6xGYVTw)
+
+[java从零手写实现redis（三）redis expire 过期原理](https://mp.weixin.qq.com/s/BWfBc98oLqhAPLN2Hgkwow)
+
+[java从零手写实现redis（三）内存数据如何重启不丢失？](https://mp.weixin.qq.com/s/G41SRZQm1_0uQXBAGHAYbw)
