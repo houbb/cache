@@ -41,4 +41,13 @@ public @interface CacheInterceptor {
      */
     boolean aof() default false;
 
+    /**
+     * 是否执行驱除更新
+     *
+     * 主要用于 LRU/LFU 等驱除策略
+     * @return 是否
+     * @since 0.0.11
+     */
+    boolean evict() default false;
+
 }

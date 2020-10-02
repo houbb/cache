@@ -7,7 +7,6 @@ import com.github.houbb.cache.api.ICachePersist;
 import com.github.houbb.cache.core.support.interceptor.CacheInterceptorContext;
 import com.github.houbb.cache.core.support.interceptor.CacheInterceptors;
 import com.github.houbb.cache.core.support.persist.CachePersistAof;
-import com.github.houbb.cache.core.support.persist.CachePersists;
 
 import java.util.List;
 
@@ -48,6 +47,13 @@ public final class CacheProxyBs {
      */
     @SuppressWarnings("all")
     private final ICacheInterceptor persistInterceptors = CacheInterceptors.aof();
+
+    /**
+     * 驱除拦截器
+     * @since 0.0.11
+     */
+    @SuppressWarnings("all")
+    private final ICacheInterceptor evictInterceptors = CacheInterceptors.evict();
 
     /**
      * 新建对象实例
@@ -139,6 +145,15 @@ public final class CacheProxyBs {
                     persistInterceptors.before(interceptorContext);
                 } else {
                     persistInterceptors.after(interceptorContext);
+                }
+            }
+
+            //4. 驱除策略更新
+            if(cacheInterceptor.evict()) {
+                if(before) {
+                    evictInterceptors.before(interceptorContext);
+                } else {
+                    evictInterceptors.after(interceptorContext);
                 }
             }
         }

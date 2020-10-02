@@ -1,5 +1,6 @@
 package com.github.houbb.cache.core.support.evict;
 
+import com.github.houbb.cache.api.ICacheEntry;
 import com.github.houbb.cache.api.ICacheEvict;
 import com.github.houbb.cache.api.ICacheEvictContext;
 
@@ -8,11 +9,11 @@ import com.github.houbb.cache.api.ICacheEvictContext;
  * @author binbin.hou
  * @since 0.0.2
  */
-public class CacheEvictNone<K,V> implements ICacheEvict<K,V> {
+public class CacheEvictNone<K,V> extends AbstractCacheEvict<K,V> {
 
     @Override
-    public boolean evict(ICacheEvictContext<K, V> context) {
-        return false;
+    protected ICacheEntry<K, V> doEvict(ICacheEvictContext<K, V> context) {
+        return null;
     }
 
 }

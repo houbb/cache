@@ -3,6 +3,7 @@ package com.github.houbb.cache.core.support.interceptor;
 import com.github.houbb.cache.api.ICacheInterceptor;
 import com.github.houbb.cache.core.support.interceptor.aof.CacheInterceptorAof;
 import com.github.houbb.cache.core.support.interceptor.common.CacheInterceptorCost;
+import com.github.houbb.cache.core.support.interceptor.evict.CacheInterceptorEvict;
 import com.github.houbb.cache.core.support.interceptor.refresh.CacheInterceptorRefresh;
 
 import java.util.ArrayList;
@@ -47,6 +48,16 @@ public final class CacheInterceptors {
     @SuppressWarnings("all")
     public static ICacheInterceptor aof() {
         return new CacheInterceptorAof();
+    }
+
+    /**
+     * 驱除策略拦截器
+     * @return 结果
+     * @since 0.0.11
+     */
+    @SuppressWarnings("all")
+    public static ICacheInterceptor evict() {
+        return new CacheInterceptorEvict();
     }
 
 }

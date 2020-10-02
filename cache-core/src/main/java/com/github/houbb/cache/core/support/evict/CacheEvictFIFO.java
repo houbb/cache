@@ -1,8 +1,8 @@
 package com.github.houbb.cache.core.support.evict;
 
 import com.github.houbb.cache.api.ICache;
-import com.github.houbb.cache.api.ICacheEvict;
 import com.github.houbb.cache.api.ICacheEvictContext;
+import com.github.houbb.cache.core.model.CacheEntry;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -12,7 +12,7 @@ import java.util.Queue;
  * @author binbin.hou
  * @since 0.0.2
  */
-public class CacheEvictFIFO<K,V> implements ICacheEvict<K,V> {
+public class CacheEvictFIFO<K,V> extends AbstractCacheEvict<K,V> {
 
     /**
      * queue 信息
@@ -21,15 +21,16 @@ public class CacheEvictFIFO<K,V> implements ICacheEvict<K,V> {
     private final Queue<K> queue = new LinkedList<>();
 
     @Override
-    public boolean evict(ICacheEvictContext<K, V> context) {
-        boolean result = false;
+    public CacheEntry<K,V> doEvict(ICacheEvictContext<K, V> context) {
+        CacheEntry<K,V> result = null;
+
         final ICache<K,V> cache = context.cache();
         // 超过限制，执行移除
         if(cache.size() >= context.size()) {
             K evictKey = queue.remove();
             // 移除最开始的元素
-            cache.remove(evictKey);
-            result = true;
+            V evictValue = cache.remove(evictKey);
+            result = new CacheEntry<>(evictKey, evictValue);
         }
 
         // 将新加的元素放入队尾

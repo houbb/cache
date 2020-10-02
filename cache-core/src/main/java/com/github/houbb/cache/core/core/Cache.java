@@ -112,6 +112,17 @@ public class Cache<K,V> implements ICache<K,V> {
         return persist;
     }
 
+
+    /**
+     * 获取驱除策略
+     * @return 驱除策略
+     * @since 0.0.11
+     */
+    @Override
+    public ICacheEvict<K, V> evict() {
+        return this.evict;
+    }
+
     /**
      * 设置持久化策略
      * @param persist 持久化
@@ -214,7 +225,7 @@ public class Cache<K,V> implements ICache<K,V> {
     }
 
     @Override
-    @CacheInterceptor(refresh = true)
+    @CacheInterceptor(refresh = true, evict = true)
     public boolean containsKey(Object key) {
         return map.containsKey(key);
     }
@@ -226,7 +237,7 @@ public class Cache<K,V> implements ICache<K,V> {
     }
 
     @Override
-    @CacheInterceptor
+    @CacheInterceptor(evict = true)
     @SuppressWarnings("unchecked")
     public V get(Object key) {
         //1. 刷新所有过期信息
@@ -237,19 +248,12 @@ public class Cache<K,V> implements ICache<K,V> {
     }
 
     @Override
-    @CacheInterceptor(aof = true)
+    @CacheInterceptor(aof = true, evict = true)
     public V put(K key, V value) {
         //1.1 尝试驱除
         CacheEvictContext<K,V> context = new CacheEvictContext<>();
         context.key(key).size(sizeLimit).cache(this);
-        boolean evictResult = evict.evict(context);
-        if(evictResult) {
-            // 执行淘汰监听器
-            ICacheRemoveListenerContext<K,V> removeListenerContext = CacheRemoveListenerContext.<K,V>newInstance().key(key).value(value).type(CacheRemoveType.EVICT.code());
-            for(ICacheRemoveListener<K,V> listener : this.removeListeners) {
-                listener.listen(removeListenerContext);
-            }
-        }
+        evict.evict(context);
 
         //2. 判断驱除后的信息
         if(isSizeLimit()) {
@@ -271,7 +275,7 @@ public class Cache<K,V> implements ICache<K,V> {
     }
 
     @Override
-    @CacheInterceptor(aof = true)
+    @CacheInterceptor(aof = true, evict = true)
     public V remove(Object key) {
         return map.remove(key);
     }

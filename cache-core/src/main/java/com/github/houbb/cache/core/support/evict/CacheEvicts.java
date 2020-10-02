@@ -36,4 +36,16 @@ public final class CacheEvicts {
         return new CacheEvictFIFO<>();
     }
 
+    /**
+     * LRU 驱除策略
+     *
+     * @param <K> key
+     * @param <V> value
+     * @return 结果
+     * @since 0.0.11
+     */
+    public static <K, V> ICacheEvict<K, V> lru() {
+        return new CacheEvictLRU<>();
+    }
+
 }

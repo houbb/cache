@@ -89,8 +89,15 @@ public interface ICache<K, V> extends Map<K, V> {
     /**
      * 持久化类
      * @return 持久化类
-     * @since 0.0.10s
+     * @since 0.0.10
      */
     ICachePersist<K,V> persist();
+
+    /**
+     * 淘汰策略
+     * @return 淘汰
+     * @since 0.0.11
+     */
+    ICacheEvict<K,V> evict();
 
 }

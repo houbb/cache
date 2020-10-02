@@ -33,11 +33,15 @@
 
 - 支持自定义 evict 驱除策略
 
+内置 FIFO 和 LRU 驱除策略
+
 - 支持自定义删除监听器
 
 - 日志整合框架，自适应常见日志
 
 - 支持 load 初始化和 persist 持久化
+
+RDB 和 AOF 两种模式
 
 # 变更日志
 
@@ -57,7 +61,7 @@ Maven 3.X 及其以上版本
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>cache-core</artifactId>
-    <version>0.0.9</version>
+    <version>0.0.10</version>
 </dependency>
 ```
 
@@ -312,9 +316,9 @@ Assert.assertEquals(2, cache.size());
 
 ## 淘汰策略
 
-- [ ] LRU
-
 - [ ] LFU
+
+- [ ] 弱引用
 
 ## 持久化
 
@@ -324,11 +328,21 @@ Assert.assertEquals(2, cache.size());
 
 - [ ] 命中率
 
+- [ ] keys 数量
+
+- [ ] evict 数量
+
+- [ ] expire 数量
+
+- [ ] 耗时统计
+
 ## 并发
 
 - [ ] 并发安全保障
 
 ## 其他
+
+- [ ] 异步 callable 操作
 
 - [ ] spring 整合
 

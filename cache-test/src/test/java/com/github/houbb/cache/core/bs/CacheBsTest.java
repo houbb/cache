@@ -184,4 +184,28 @@ public class CacheBsTest {
         System.out.println(cache.keySet());
     }
 
+
+    /**
+     * LRU 驱除策略测试
+     * @since 0.0.10
+     */
+    @Test
+    public void lruEvictTest() throws InterruptedException {
+        ICache<String, String> cache = CacheBs.<String,String>newInstance()
+                .size(3)
+                .evict(CacheEvicts.<String, String>lru())
+                .build();
+
+        cache.put("A", "hello");
+        cache.put("B", "world");
+        cache.put("C", "FIFO");
+
+        // 访问一次A
+        cache.get("A");
+        cache.put("D", "LRU");
+
+        Assert.assertEquals(3, cache.size());
+        System.out.println(cache.keySet());
+    }
+
 }
