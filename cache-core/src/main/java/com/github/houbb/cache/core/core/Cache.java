@@ -8,6 +8,7 @@ import com.github.houbb.cache.core.support.evict.CacheEvictContext;
 import com.github.houbb.cache.core.support.expire.CacheExpire;
 import com.github.houbb.cache.core.support.listener.remove.CacheRemoveListenerContext;
 import com.github.houbb.cache.core.support.persist.InnerCachePersist;
+import com.github.houbb.cache.core.support.proxy.CacheProxy;
 
 import java.util.*;
 
@@ -102,6 +103,16 @@ public class Cache<K,V> implements ICache<K,V> {
     }
 
     /**
+     * 获取持久化类
+     * @return 持久化类
+     * @since 0.0.10
+     */
+    @Override
+    public ICachePersist<K, V> persist() {
+        return persist;
+    }
+
+    /**
      * 设置持久化策略
      * @param persist 持久化
      * @since 0.0.8
@@ -146,8 +157,8 @@ public class Cache<K,V> implements ICache<K,V> {
      * @since 0.0.7
      */
     public void init() {
-        this.load.load(this);
         this.expire = new CacheExpire<>(this);
+        this.load.load(this);
 
         // 初始化持久化
         if(this.persist != null) {
@@ -156,7 +167,7 @@ public class Cache<K,V> implements ICache<K,V> {
     }
 
     /**
-     * 设置过期策略
+     * 设置过期时间
      * @param key         key
      * @param timeInMills 毫秒时间之后过期
      * @return this
@@ -165,11 +176,20 @@ public class Cache<K,V> implements ICache<K,V> {
     @CacheInterceptor
     public ICache<K, V> expire(K key, long timeInMills) {
         long expireTime = System.currentTimeMillis() + timeInMills;
-        return this.expireAt(key, expireTime);
+
+        // 使用代理调用
+        Cache<K,V> cachePoxy = (Cache<K, V>) CacheProxy.getProxy(this);
+        return cachePoxy.expireAt(key, expireTime);
     }
 
+    /**
+     * 指定过期信息
+     * @param key key
+     * @param timeInMills 时间戳
+     * @return this
+     */
     @Override
-    @CacheInterceptor
+    @CacheInterceptor(aof = true)
     public ICache<K, V> expireAt(K key, long timeInMills) {
         this.expire.expire(key, timeInMills);
         return this;
@@ -217,7 +237,7 @@ public class Cache<K,V> implements ICache<K,V> {
     }
 
     @Override
-    @CacheInterceptor
+    @CacheInterceptor(aof = true)
     public V put(K key, V value) {
         //1.1 尝试驱除
         CacheEvictContext<K,V> context = new CacheEvictContext<>();
@@ -251,19 +271,19 @@ public class Cache<K,V> implements ICache<K,V> {
     }
 
     @Override
-    @CacheInterceptor
+    @CacheInterceptor(aof = true)
     public V remove(Object key) {
         return map.remove(key);
     }
 
     @Override
-    @CacheInterceptor
+    @CacheInterceptor(aof = true)
     public void putAll(Map<? extends K, ? extends V> m) {
         map.putAll(m);
     }
 
     @Override
-    @CacheInterceptor(refresh = true)
+    @CacheInterceptor(refresh = true, aof = true)
     public void clear() {
         map.clear();
     }

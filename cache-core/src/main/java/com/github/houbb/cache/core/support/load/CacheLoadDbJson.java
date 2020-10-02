@@ -3,7 +3,7 @@ package com.github.houbb.cache.core.support.load;
 import com.alibaba.fastjson.JSON;
 import com.github.houbb.cache.api.ICache;
 import com.github.houbb.cache.api.ICacheLoad;
-import com.github.houbb.cache.core.model.PersistEntry;
+import com.github.houbb.cache.core.model.PersistRdbEntry;
 import com.github.houbb.heaven.util.io.FileUtil;
 import com.github.houbb.heaven.util.lang.ObjectUtil;
 import com.github.houbb.heaven.util.lang.StringUtil;
@@ -48,7 +48,7 @@ public class CacheLoadDbJson<K,V> implements ICacheLoad<K,V> {
 
             // 执行
             // 简单的类型还行，复杂的这种反序列化会失败
-            PersistEntry<K,V> entry = JSON.parseObject(line, PersistEntry.class);
+            PersistRdbEntry<K,V> entry = JSON.parseObject(line, PersistRdbEntry.class);
 
             K key = entry.getKey();
             V value = entry.getValue();

@@ -5,7 +5,7 @@ package com.github.houbb.cache.core.model;
  * @author binbin.hou
  * @since 0.0.8
  */
-public class PersistEntry<K,V> {
+public class PersistRdbEntry<K,V> {
 
     /**
      * key

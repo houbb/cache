@@ -35,4 +35,16 @@ public final class CacheLoads {
         return new CacheLoadDbJson<>(dbPath);
     }
 
+    /**
+     * AOF 文件加载模式
+     * @param dbPath 文件路径
+     * @param <K> key
+     * @param <V> value
+     * @return 值
+     * @since 0.0.10
+     */
+    public static <K,V> ICacheLoad<K,V> aof(final String dbPath) {
+        return new CacheLoadAof<>(dbPath);
+    }
+
 }

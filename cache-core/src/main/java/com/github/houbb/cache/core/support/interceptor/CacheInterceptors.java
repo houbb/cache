@@ -1,6 +1,7 @@
 package com.github.houbb.cache.core.support.interceptor;
 
 import com.github.houbb.cache.api.ICacheInterceptor;
+import com.github.houbb.cache.core.support.interceptor.aof.CacheInterceptorAof;
 import com.github.houbb.cache.core.support.interceptor.common.CacheInterceptorCost;
 import com.github.houbb.cache.core.support.interceptor.refresh.CacheInterceptorRefresh;
 
@@ -36,6 +37,16 @@ public final class CacheInterceptors {
         List<ICacheInterceptor> list = new ArrayList<>();
         list.add(new CacheInterceptorRefresh());
         return list;
+    }
+
+    /**
+     * AOF 模式
+     * @return 结果
+     * @since 0.0.10
+     */
+    @SuppressWarnings("all")
+    public static ICacheInterceptor aof() {
+        return new CacheInterceptorAof();
     }
 
 }

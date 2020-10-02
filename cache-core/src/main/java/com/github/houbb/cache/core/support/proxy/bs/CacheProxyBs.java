@@ -3,8 +3,11 @@ package com.github.houbb.cache.core.support.proxy.bs;
 import com.github.houbb.cache.annotation.CacheInterceptor;
 import com.github.houbb.cache.api.ICache;
 import com.github.houbb.cache.api.ICacheInterceptor;
+import com.github.houbb.cache.api.ICachePersist;
 import com.github.houbb.cache.core.support.interceptor.CacheInterceptorContext;
 import com.github.houbb.cache.core.support.interceptor.CacheInterceptors;
+import com.github.houbb.cache.core.support.persist.CachePersistAof;
+import com.github.houbb.cache.core.support.persist.CachePersists;
 
 import java.util.List;
 
@@ -38,6 +41,13 @@ public final class CacheProxyBs {
      */
     @SuppressWarnings("all")
     private final List<ICacheInterceptor> refreshInterceptors = CacheInterceptors.defaultRefreshList();
+
+    /**
+     * 持久化拦截器
+     * @since 0.0.10
+     */
+    @SuppressWarnings("all")
+    private final ICacheInterceptor persistInterceptors = CacheInterceptors.aof();
 
     /**
      * 新建对象实例
@@ -119,6 +129,16 @@ public final class CacheProxyBs {
                     } else {
                         interceptor.after(interceptorContext);
                     }
+                }
+            }
+
+            //3. AOF 追加
+            final ICachePersist cachePersist = cache.persist();
+            if(cacheInterceptor.aof() && (cachePersist instanceof CachePersistAof)) {
+                if(before) {
+                    persistInterceptors.before(interceptorContext);
+                } else {
+                    persistInterceptors.after(interceptorContext);
                 }
             }
         }

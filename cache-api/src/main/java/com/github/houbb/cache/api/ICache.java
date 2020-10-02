@@ -86,4 +86,11 @@ public interface ICache<K, V> extends Map<K, V> {
      */
     ICacheLoad<K,V> load();
 
+    /**
+     * 持久化类
+     * @return 持久化类
+     * @since 0.0.10s
+     */
+    ICachePersist<K,V> persist();
+
 }

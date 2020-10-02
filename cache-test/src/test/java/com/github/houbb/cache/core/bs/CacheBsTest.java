@@ -115,7 +115,7 @@ public class CacheBsTest {
      * @since 0.0.7
      */
     @Test
-    public void persistTest() throws InterruptedException {
+    public void persistRdbTest() throws InterruptedException {
         ICache<String, String> cache = CacheBs.<String,String>newInstance()
                 .load(new MyCacheLoad())
                 .persist(CachePersists.<String, String>dbJson("1.rdb"))
@@ -150,6 +150,38 @@ public class CacheBsTest {
 
         cache.put("1", "2");
         cache.get("1");
+    }
+
+
+    /**
+     * 持久化 AOF 接口测试
+     * @since 0.0.10
+     */
+    @Test
+    public void persistAofTest() throws InterruptedException {
+        ICache<String, String> cache = CacheBs.<String,String>newInstance()
+                .persist(CachePersists.<String, String>aof("1.aof"))
+                .build();
+
+        cache.put("1", "1");
+        cache.expire("1", 10);
+        cache.remove("2");
+
+        TimeUnit.SECONDS.sleep(1);
+    }
+
+    /**
+     * 加载 AOF 接口测试
+     * @since 0.0.10
+     */
+    @Test
+    public void loadAofTest() throws InterruptedException {
+        ICache<String, String> cache = CacheBs.<String,String>newInstance()
+                .load(CacheLoads.<String, String>aof("default.aof"))
+                .build();
+
+        Assert.assertEquals(1, cache.size());
+        System.out.println(cache.keySet());
     }
 
 }

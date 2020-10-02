@@ -7,7 +7,6 @@ import com.github.houbb.log.integration.core.LogFactory;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 内部缓存持久化类
@@ -62,7 +61,7 @@ public class InnerCachePersist<K,V> {
                     log.error("文件持久化异常", exception);
                 }
             }
-        }, 0, 10, TimeUnit.MINUTES);
+        }, persist.delay(), persist.period(), persist.timeUnit());
     }
 
 }

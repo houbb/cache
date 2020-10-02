@@ -2,21 +2,20 @@ package com.github.houbb.cache.core.support.persist;
 
 import com.alibaba.fastjson.JSON;
 import com.github.houbb.cache.api.ICache;
-import com.github.houbb.cache.api.ICachePersist;
-import com.github.houbb.cache.core.model.PersistEntry;
+import com.github.houbb.cache.core.model.PersistRdbEntry;
 import com.github.houbb.heaven.util.io.FileUtil;
-import com.github.houbb.heaven.util.lang.StringUtil;
 
 import java.nio.file.StandardOpenOption;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 缓存持久化-db-基于 JSON
  * @author binbin.hou
  * @since 0.0.8
  */
-public class CachePersistDbJson<K,V> implements ICachePersist<K,V> {
+public class CachePersistDbJson<K,V> extends CachePersistAdaptor<K,V> {
 
     /**
      * 数据库路径
@@ -46,14 +45,29 @@ public class CachePersistDbJson<K,V> implements ICachePersist<K,V> {
         for(Map.Entry<K,V> entry : entrySet) {
             K key = entry.getKey();
             Long expireTime = cache.expire().expireTime(key);
-            PersistEntry<K,V> persistEntry = new PersistEntry<>();
-            persistEntry.setKey(key);
-            persistEntry.setValue(entry.getValue());
-            persistEntry.setExpire(expireTime);
+            PersistRdbEntry<K,V> persistRdbEntry = new PersistRdbEntry<>();
+            persistRdbEntry.setKey(key);
+            persistRdbEntry.setValue(entry.getValue());
+            persistRdbEntry.setExpire(expireTime);
 
-            String line = JSON.toJSONString(persistEntry);
+            String line = JSON.toJSONString(persistRdbEntry);
             FileUtil.write(dbPath, line, StandardOpenOption.APPEND);
         }
+    }
+
+    @Override
+    public long delay() {
+        return 5;
+    }
+
+    @Override
+    public long period() {
+        return 5;
+    }
+
+    @Override
+    public TimeUnit timeUnit() {
+        return TimeUnit.MINUTES;
     }
 
 }
