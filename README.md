@@ -318,8 +318,6 @@ Assert.assertEquals(2, cache.size());
 
 ## 持久化
 
-- [ ] 添加 persist AOF 持久化
-
 - [ ] AOF 混合 RDB
 
 ## 统计
@@ -351,3 +349,5 @@ Assert.assertEquals(2, cache.size());
 [java从零手写实现redis（三）内存数据如何重启不丢失？](https://mp.weixin.qq.com/s/G41SRZQm1_0uQXBAGHAYbw)
 
 [java从零手写实现redis（四）添加监听器](https://mp.weixin.qq.com/s/6pIG3l_wkXBwSuJvj_KwMA)
+
+[java从零手写实现redis（五）过期策略的另一种实现思路](https://mp.weixin.qq.com/s/Atrd36UGds9_w_NFQDoEQg)
