@@ -30,9 +30,9 @@ public class CacheInterceptorEvict<K,V> implements ICacheInterceptor<K, V> {
         Method method = context.method();
         final K key = (K) context.params()[0];
         if("remove".equals(method.getName())) {
-            evict.remove(key);
+            evict.removeKey(key);
         } else {
-            evict.update(key);
+            evict.updateKey(key);
         }
     }
 

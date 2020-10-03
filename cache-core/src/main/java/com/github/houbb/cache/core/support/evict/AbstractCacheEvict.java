@@ -1,11 +1,8 @@
 package com.github.houbb.cache.core.support.evict;
 
-import com.github.houbb.cache.api.*;
-import com.github.houbb.cache.core.constant.enums.CacheRemoveType;
-import com.github.houbb.cache.core.support.listener.remove.CacheRemoveListenerContext;
-import com.github.houbb.heaven.util.lang.ObjectUtil;
-
-import java.util.List;
+import com.github.houbb.cache.api.ICacheEntry;
+import com.github.houbb.cache.api.ICacheEvict;
+import com.github.houbb.cache.api.ICacheEvictContext;
 
 /**
  * 丢弃策略-抽象实现类
@@ -16,21 +13,8 @@ public abstract class AbstractCacheEvict<K,V> implements ICacheEvict<K,V> {
 
     @Override
     public ICacheEntry<K,V> evict(ICacheEvictContext<K, V> context) {
-        ICacheEntry<K,V> evictEntry = doEvict(context);
-
-        // 添加拦截器调用
-        if(ObjectUtil.isNotNull(evictEntry)) {
-            // 执行淘汰监听器
-            ICacheRemoveListenerContext<K,V> removeListenerContext = CacheRemoveListenerContext.<K,V>newInstance().key(evictEntry.key())
-                    .value(evictEntry.value())
-                    .type(CacheRemoveType.EVICT.code());
-            for(ICacheRemoveListener<K,V> listener : context.cache().removeListeners()) {
-                listener.listen(removeListenerContext);
-            }
-        }
-
         //3. 返回结果
-        return evictEntry;
+        return doEvict(context);
     }
 
     /**
@@ -42,12 +26,12 @@ public abstract class AbstractCacheEvict<K,V> implements ICacheEvict<K,V> {
     protected abstract ICacheEntry<K,V> doEvict(ICacheEvictContext<K, V> context);
 
     @Override
-    public void update(K key) {
+    public void updateKey(K key) {
 
     }
 
     @Override
-    public void remove(K key) {
+    public void removeKey(K key) {
 
     }
 }

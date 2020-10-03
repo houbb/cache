@@ -9,6 +9,7 @@ import com.github.houbb.cache.core.support.expire.CacheExpire;
 import com.github.houbb.cache.core.support.listener.remove.CacheRemoveListenerContext;
 import com.github.houbb.cache.core.support.persist.InnerCachePersist;
 import com.github.houbb.cache.core.support.proxy.CacheProxy;
+import com.github.houbb.heaven.util.lang.ObjectUtil;
 
 import java.util.*;
 
@@ -253,7 +254,19 @@ public class Cache<K,V> implements ICache<K,V> {
         //1.1 尝试驱除
         CacheEvictContext<K,V> context = new CacheEvictContext<>();
         context.key(key).size(sizeLimit).cache(this);
-        evict.evict(context);
+
+        ICacheEntry<K,V> evictEntry = evict.evict(context);
+
+        // 添加拦截器调用
+        if(ObjectUtil.isNotNull(evictEntry)) {
+            // 执行淘汰监听器
+            ICacheRemoveListenerContext<K,V> removeListenerContext = CacheRemoveListenerContext.<K,V>newInstance().key(evictEntry.key())
+                    .value(evictEntry.value())
+                    .type(CacheRemoveType.EVICT.code());
+            for(ICacheRemoveListener<K,V> listener : context.cache().removeListeners()) {
+                listener.listen(removeListenerContext);
+            }
+        }
 
         //2. 判断驱除后的信息
         if(isSizeLimit()) {

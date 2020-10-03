@@ -48,4 +48,31 @@ public final class CacheEvicts {
         return new CacheEvictLRU<>();
     }
 
+    /**
+     * LRU 驱除策略
+     *
+     * 基于双向链表 + map 实现
+     * @param <K> key
+     * @param <V> value
+     * @return 结果
+     * @since 0.0.12
+     */
+    public static <K, V> ICacheEvict<K, V> lruDoubleListMap() {
+        return new CacheEvictLruDoubleListMap<>();
+    }
+
+
+    /**
+     * LRU 驱除策略
+     *
+     * 基于LinkedHashMap
+     * @param <K> key
+     * @param <V> value
+     * @return 结果
+     * @since 0.0.12
+     */
+    public static <K, V> ICacheEvict<K, V> lruLinkedHashMap() {
+        return new CacheEvictLruLinkedHashMap<>();
+    }
+
 }

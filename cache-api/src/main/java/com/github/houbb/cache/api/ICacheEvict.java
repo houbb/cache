@@ -22,13 +22,13 @@ public interface ICacheEvict<K, V> {
      * @param key key
      * @since 0.0.11
      */
-    void update(final K key);
+    void updateKey(final K key);
 
     /**
      * 删除 key 信息
      * @param key key
      * @since 0.0.11
      */
-    void remove(final K key);
+    void removeKey(final K key);
 
 }

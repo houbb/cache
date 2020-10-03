@@ -49,7 +49,7 @@ public class CacheEvictLRU<K,V> extends AbstractCacheEvict<K,V> {
      * @since 0.0.11
      */
     @Override
-    public void update(final K key) {
+    public void updateKey(final K key) {
         this.list.remove(key);
         this.list.add(0, key);
     }
@@ -60,7 +60,7 @@ public class CacheEvictLRU<K,V> extends AbstractCacheEvict<K,V> {
      * @since 0.0.11
      */
     @Override
-    public void remove(final K key) {
+    public void removeKey(final K key) {
         this.list.remove(key);
     }
 
