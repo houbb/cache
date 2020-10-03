@@ -15,9 +15,9 @@ import java.util.List;
  * @author binbin.hou
  * @since 0.0.11
  */
-public class CacheEvictLRU<K,V> extends AbstractCacheEvict<K,V> {
+public class CacheEvictLru<K,V> extends AbstractCacheEvict<K,V> {
 
-    private static final Log log = LogFactory.getLog(CacheEvictLRU.class);
+    private static final Log log = LogFactory.getLog(CacheEvictLru.class);
 
     /**
      * list 信息

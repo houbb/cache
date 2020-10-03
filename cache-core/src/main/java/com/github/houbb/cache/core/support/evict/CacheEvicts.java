@@ -33,7 +33,7 @@ public final class CacheEvicts {
      * @since 0.0.2
      */
     public static <K, V> ICacheEvict<K, V> fifo() {
-        return new CacheEvictFIFO<>();
+        return new CacheEvictFifo<>();
     }
 
     /**
@@ -45,7 +45,7 @@ public final class CacheEvicts {
      * @since 0.0.11
      */
     public static <K, V> ICacheEvict<K, V> lru() {
-        return new CacheEvictLRU<>();
+        return new CacheEvictLru<>();
     }
 
     /**
@@ -73,6 +73,32 @@ public final class CacheEvicts {
      */
     public static <K, V> ICacheEvict<K, V> lruLinkedHashMap() {
         return new CacheEvictLruLinkedHashMap<>();
+    }
+
+    /**
+     * LRU 驱除策略
+     *
+     * 基于 2Q 实现
+     * @param <K> key
+     * @param <V> value
+     * @return 结果
+     * @since 0.0.13
+     */
+    public static <K, V> ICacheEvict<K, V> lru2Q() {
+        return new CacheEvictLru2Q<>();
+    }
+
+    /**
+     * LRU 驱除策略
+     *
+     * 基于 LRU-2 实现
+     * @param <K> key
+     * @param <V> value
+     * @return 结果
+     * @since 0.0.13
+     */
+    public static <K, V> ICacheEvict<K, V> lru2() {
+        return new CacheEvictLru2<>();
     }
 
 }

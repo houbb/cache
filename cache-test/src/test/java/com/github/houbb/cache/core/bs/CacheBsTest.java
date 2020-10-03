@@ -5,7 +5,6 @@ import com.github.houbb.cache.core.listener.MyRemoveListener;
 import com.github.houbb.cache.core.listener.MySlowListener;
 import com.github.houbb.cache.core.load.MyCacheLoad;
 import com.github.houbb.cache.core.support.evict.CacheEvicts;
-import com.github.houbb.cache.core.support.listener.slow.CacheSlowListeners;
 import com.github.houbb.cache.core.support.load.CacheLoads;
 import com.github.houbb.cache.core.support.map.Maps;
 import com.github.houbb.cache.core.support.persist.CachePersists;
@@ -227,11 +226,61 @@ public class CacheBsTest {
         System.out.println(cache.keySet());
     }
 
+    /**
+     * 基于 LinkedHashMap 实现
+     * @since 0.0.12
+     */
     @Test
-    public void lruLinkedHashMapTest() throws InterruptedException {
+    public void lruLinkedHashMapTest()  {
         ICache<String, String> cache = CacheBs.<String,String>newInstance()
                 .size(3)
                 .evict(CacheEvicts.<String, String>lruLinkedHashMap())
+                .build();
+
+        cache.put("A", "hello");
+        cache.put("B", "world");
+        cache.put("C", "FIFO");
+
+        // 访问一次A
+        cache.get("A");
+        cache.put("D", "LRU");
+
+        Assert.assertEquals(3, cache.size());
+        System.out.println(cache.keySet());
+    }
+
+    /**
+     * 基于 LRU 2Q 实现
+     * @since 0.0.13
+     */
+    @Test
+    public void lruQ2Test()  {
+        ICache<String, String> cache = CacheBs.<String,String>newInstance()
+                .size(3)
+                .evict(CacheEvicts.<String, String>lru2Q())
+                .build();
+
+        cache.put("A", "hello");
+        cache.put("B", "world");
+        cache.put("C", "FIFO");
+
+        // 访问一次A
+        cache.get("A");
+        cache.put("D", "LRU");
+
+        Assert.assertEquals(3, cache.size());
+        System.out.println(cache.keySet());
+    }
+
+    /**
+     * 基于 LRU-2 实现
+     * @since 0.0.12
+     */
+    @Test
+    public void lru2Test()  {
+        ICache<String, String> cache = CacheBs.<String,String>newInstance()
+                .size(3)
+                .evict(CacheEvicts.<String, String>lru2())
                 .build();
 
         cache.put("A", "hello");

@@ -12,7 +12,7 @@ import java.util.Queue;
  * @author binbin.hou
  * @since 0.0.2
  */
-public class CacheEvictFIFO<K,V> extends AbstractCacheEvict<K,V> {
+public class CacheEvictFifo<K,V> extends AbstractCacheEvict<K,V> {
 
     /**
      * queue 信息

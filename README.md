@@ -61,7 +61,7 @@ Maven 3.X 及其以上版本
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>cache-core</artifactId>
-    <version>0.0.12</version>
+    <version>0.0.13</version>
 </dependency>
 ```
 
@@ -99,6 +99,20 @@ ICache<String, String> cache = CacheBs.<String,String>newInstance()
                 .size(2)
                 .build();
 ```
+
+## 淘汰策略
+
+目前内置了几种淘汰策略，可以直接通过 `CacheEvicts` 工具类创建。
+
+| 策略 | 说明 |
+|:---|:---|
+| none | 没有任何淘汰策略 |
+| fifo | 先进先出（默认策略） |
+| lru | 最基本的朴素 LRU 策略，性能一般 |
+| lruDoubleListMap | 基于双向链表+MAP 实现的朴素 LRU，性能优于 lru |
+| lruLinkedHashMap | 基于 LinkedHashMap 实现的朴素 LRU，与 lruDoubleListMap 差不多 |
+| lru2Q | 基于 LRU 2Q 的改进版 LRU 实现，命中率优于朴素LRU |
+| lru2 | 基于 LRU-2 的改进版 LRU 实现，命中率优于 lru2Q |
 
 ## 过期支持
 
@@ -365,3 +379,5 @@ Assert.assertEquals(2, cache.size());
 [java从零手写实现redis（四）添加监听器](https://mp.weixin.qq.com/s/6pIG3l_wkXBwSuJvj_KwMA)
 
 [java从零手写实现redis（五）过期策略的另一种实现思路](https://mp.weixin.qq.com/s/Atrd36UGds9_w_NFQDoEQg)
+
+[java从零手写实现redis（六）AOF 持久化原理详解及实现](https://mp.weixin.qq.com/s/rFuSjNF43Ybxy-qBCtgasQ)
