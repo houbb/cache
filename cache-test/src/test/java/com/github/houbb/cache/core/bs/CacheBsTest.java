@@ -274,13 +274,36 @@ public class CacheBsTest {
 
     /**
      * 基于 LRU-2 实现
-     * @since 0.0.12
+     * @since 0.0.13
      */
     @Test
     public void lru2Test()  {
         ICache<String, String> cache = CacheBs.<String,String>newInstance()
                 .size(3)
                 .evict(CacheEvicts.<String, String>lru2())
+                .build();
+
+        cache.put("A", "hello");
+        cache.put("B", "world");
+        cache.put("C", "FIFO");
+
+        // 访问一次A
+        cache.get("A");
+        cache.put("D", "LRU");
+
+        Assert.assertEquals(3, cache.size());
+        System.out.println(cache.keySet());
+    }
+
+    /**
+     * 基于 LFU 实现
+     * @since 0.0.14
+     */
+    @Test
+    public void lfuTest()  {
+        ICache<String, String> cache = CacheBs.<String,String>newInstance()
+                .size(3)
+                .evict(CacheEvicts.<String, String>lfu())
                 .build();
 
         cache.put("A", "hello");

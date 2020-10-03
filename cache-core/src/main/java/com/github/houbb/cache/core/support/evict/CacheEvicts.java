@@ -101,4 +101,17 @@ public final class CacheEvicts {
         return new CacheEvictLru2<>();
     }
 
+    /**
+     * LFU 驱除策略
+     *
+     * 基于 LFU 实现
+     * @param <K> key
+     * @param <V> value
+     * @return 结果
+     * @since 0.0.14
+     */
+    public static <K, V> ICacheEvict<K, V> lfu() {
+        return new CacheEvictLfu<>();
+    }
+
 }

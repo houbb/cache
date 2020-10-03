@@ -61,7 +61,7 @@ Maven 3.X 及其以上版本
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>cache-core</artifactId>
-    <version>0.0.13</version>
+    <version>0.0.14</version>
 </dependency>
 ```
 
@@ -324,15 +324,23 @@ Assert.assertEquals(2, cache.size());
 
 # 后期 Road-MAP
 
-## 优化
+## 淘汰策略
+
+- [ ] CLOCK 算法
+
+- [ ] SC 二次机会
+
+- [ ] 老化算法
+
+- [ ] 弱引用
+
+## 过期特性
 
 - [ ] 过期策略添加随机返回
 
-## 淘汰策略
+- [ ] expireAfterWrite()
 
-- [ ] LFU
-
-- [ ] 弱引用
+- [ ] expireAfterAccess()
 
 ## 持久化
 
