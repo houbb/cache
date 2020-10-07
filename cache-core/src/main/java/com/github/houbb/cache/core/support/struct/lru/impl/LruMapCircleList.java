@@ -87,10 +87,10 @@ public class LruMapCircleList<K,V> implements ILruMap<K,V> {
      *
      * 类似于 FIFO，直接放在队列的最后
      *
-     * head==>1==>head
+     * head==1==head
      * 加入元素：
      *
-     * head==>1==>2==>head
+     * head==1==2==head
      *
      * （1）如果元素不存在，则直接插入。
      * 默认 accessFlag = 0;
@@ -129,10 +129,10 @@ public class LruMapCircleList<K,V> implements ILruMap<K,V> {
      * 1. 是否存在，不存在则忽略
      * 2. 存在则移除，从链表+map中移除
      *
-     * head==>1==>2==>head
+     * head==1==2==head
      *
      * 删除 2 之后：
-     * head==>1==>head
+     * head==1==head
      * @param key 元素
      * @since 0.0.15
      */
