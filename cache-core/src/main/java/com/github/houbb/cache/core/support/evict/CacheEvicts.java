@@ -114,4 +114,15 @@ public final class CacheEvicts {
         return new CacheEvictLfu<>();
     }
 
+    /**
+     * 时钟算法
+     * @param <K> key
+     * @param <V> value
+     * @return 结果
+     * @since 0.0.15
+     */
+    public static <K, V> ICacheEvict<K, V> clock() {
+        return new CacheEvictClock<>();
+    }
+
 }

@@ -63,6 +63,9 @@ public class LruMapDoubleList<K,V> implements ILruMap<K,V> {
         K evictKey = tailPre.key();
         V evictValue = tailPre.value();
 
+        // 执行删除
+        this.removeKey(evictKey);
+
         return CacheEntry.of(evictKey, evictValue);
     }
 
@@ -126,6 +129,7 @@ public class LruMapDoubleList<K,V> implements ILruMap<K,V> {
 
         // 删除 map 中对应信息
         this.indexMap.remove(key);
+        log.debug("从 LruMapDoubleList 中移除 key: {}", key);
     }
 
     @Override

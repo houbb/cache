@@ -1,6 +1,6 @@
 :: 项目信息指定
-SET oldVersion=0.1.0-SNAPSHOT
-SET newVersion=0.2.0
+SET oldVersion=0.0.14
+SET newVersion=0.0.15-SNAPSHOT
 SET projectName=cache
 
 :: maven 命令的执行
