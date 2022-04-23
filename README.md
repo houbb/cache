@@ -389,3 +389,37 @@ Assert.assertEquals(2, cache.size());
 [java从零手写实现redis（五）过期策略的另一种实现思路](https://mp.weixin.qq.com/s/Atrd36UGds9_w_NFQDoEQg)
 
 [java从零手写实现redis（六）AOF 持久化原理详解及实现](https://mp.weixin.qq.com/s/rFuSjNF43Ybxy-qBCtgasQ)
+
+[java从零开始手写redis（七）LRU 缓存淘汰策略详解](https://mp.weixin.qq.com/s/X-OIqu_rgLskvbF2rZMP6Q)
+
+[java从零开始手写redis（八）朴素 LRU 淘汰算法性能优化](https://mp.weixin.qq.com/s/H8gOujnlTinctjVQqW0ITA)
+
+[java 从零开始手写 redis（九）LRU 缓存淘汰算法如何避免缓存污染](https://mp.weixin.qq.com/s/jzM_wDw37QXTeYMFYtRJaw)
+
+[java 从零开始手写 redis（十）缓存淘汰算法 LFU 最少使用频次](https://mp.weixin.qq.com/s/mUyCTCVObwY8XdLcO1pOWg)
+
+[java 从零开始手写 redis（11）clock时钟淘汰算法详解及实现](https://mp.weixin.qq.com/s/h9oub0TT94ObaiKZ7s5VsA)
+
+[java 从零开始手写 redis（12）redis expire 过期如何实现随机获取keys？](https://mp.weixin.qq.com/s/YEBPtrOWIyBl9dsHa59JYg)
+
+[java从零开始手写 redis（13）HashMap 源码原理详解](https://mp.weixin.qq.com/s/SURVmTf6K_ou85fShFzrNA)
+
+[java 从零开始手写 redis（14）redis渐进式rehash详解](https://mp.weixin.qq.com/s/gPD-4wCwirdyO5QyHrXOIA)
+
+[java 从零开始手写 redis（15）实现自己的 HashMap](https://mp.weixin.qq.com/s/e5fskVfeDMTuJhjEAd1gQw)
+
+[java 从零开始手写 redis（16）实现渐进式 rehash map](https://mp.weixin.qq.com/s/Lwp2js4lrHAbuQ5Fexer6w)
+
+【实战汇总】
+
+[缓存实战（1）缓存雪崩、缓存击穿和缓存穿透入门简介及解决方案](https://mp.weixin.qq.com/s/yYE-zqJOyiLlEYXRj5by9g)
+
+[缓存实战（2）布隆过滤器是啥？guava 的 BloomFilter 使用](https://mp.weixin.qq.com/s/dY-0jE23jggU3wqjdHGyZQ)
+
+[缓存实战（3）让你彻底搞懂布隆过滤器！实现一个自己的BloomFilter](https://mp.weixin.qq.com/s/UsIjHfiy96aZgpzybuBYgg)
+
+[缓存实战（4）bloom filter 使用最佳实践，让你少踩坑](https://mp.weixin.qq.com/s/obqh0FMzahRFa5sNe5eq3g)
+
+[java 从零实现属于你的 redis 分布式锁](https://mp.weixin.qq.com/s/MzybPDRGwaWXX8viE8adAA)
+
+[3天时间，我是如何解决redis bigkey删除问题的？](https://mp.weixin.qq.com/s/06tjn76uebvgfzYaahdY0g)
