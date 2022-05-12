@@ -423,3 +423,5 @@ Assert.assertEquals(2, cache.size());
 [java 从零实现属于你的 redis 分布式锁](https://mp.weixin.qq.com/s/MzybPDRGwaWXX8viE8adAA)
 
 [3天时间，我是如何解决redis bigkey删除问题的？](https://mp.weixin.qq.com/s/06tjn76uebvgfzYaahdY0g)
+
+[redis 多路复用](http://houbb.github.io/2018/09/08/redis-learn-45-multi-io)
