@@ -342,4 +342,9 @@ public class CacheBsTest {
         System.out.println(cache.keySet());
     }
 
+    @Test
+    public void gitTest(){
+        System.out.println("git ....");
+    }
+
 }
