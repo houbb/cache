@@ -21,7 +21,7 @@ import java.util.Map;
 public class CacheEvictLruLinkedHashMap<K,V> extends LinkedHashMap<K,V>
     implements ICacheEvict<K,V> {
 
-    private static final Log log = LogFactory.getLog(CacheEvictLruDoubleListMap.class);
+    private static final Log log = LogFactory.getLog(CacheEvictLruLinkedHashMap.class);
 
     /**
      * 是否移除标识
