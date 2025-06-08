@@ -324,6 +324,14 @@ Assert.assertEquals(2, cache.size());
 
 # 后期 Road-MAP
 
+## 代码优化
+
+- [ ] 不再自依赖 cache，移除改为依赖 map 本身
+
+- [ ] expire 支持用户自定义
+
+- [ ] 拦截器支持用户自定义，实现方式调整，不要用代理
+
 ## 淘汰策略
 
 - [ ] CLOCK 算法
