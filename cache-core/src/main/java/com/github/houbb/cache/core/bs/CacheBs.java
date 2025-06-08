@@ -13,6 +13,7 @@ import com.github.houbb.heaven.util.common.ArgUtil;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 缓存引导类
@@ -38,7 +39,7 @@ public final class CacheBs<K,V> {
      * map 实现
      * @since 0.0.2
      */
-    private Map<K,V> map = new HashMap<>();
+    private Map<K,V> map = new ConcurrentHashMap<>();
 
     /**
      * 大小限制

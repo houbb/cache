@@ -426,43 +426,20 @@ Assert.assertEquals(2, cache.size());
 
 [redis 多路复用](http://houbb.github.io/2018/09/08/redis-learn-45-multi-io)
 
-# 中间件等工具开源矩阵
+## 开源矩阵
 
-[heaven: 收集开发中常用的工具类](https://github.com/houbb/heaven)
+下面是一些缓存系列的开源矩阵规划。
 
-[rpc: 基于 netty4 实现的远程调用工具](https://github.com/houbb/rpc)
-
-[mq: 简易版 mq 实现](https://github.com/houbb/mq)
-
-[ioc: 模拟简易版 spring ioc](https://github.com/houbb/ioc)
-
-[mybatis: 简易版 mybatis](https://github.com/houbb/mybatis)
-
-[cache: 渐进式 redis 缓存](https://github.com/houbb/cache)
-
-[jdbc-pool: 数据库连接池实现](https://github.com/houbb/jdbc-pool)
-
-[sandglass: 任务调度时间工具框架](https://github.com/houbb/sandglass)
-
-[sisyphus: 支持注解的重试框架](https://github.com/houbb/sisyphus)
-
-[resubmit: 防止重复提交框架，支持注解](https://github.com/houbb/resubmit)
-
-[auto-log: 日志自动输出](https://github.com/houbb/auto-log)
-
-[async: 多线程异步并行框架](https://github.com/houbb/async)
-
-# 缓存相关工具
-
-[cache: 手写渐进式 redis](https://github.com/houbb/cache)
-
-[common-cache: 通用缓存标准定义](https://github.com/houbb/common-cache)
-
-[redis-config: 兼容各种常见的 redis 配置模式](https://github.com/houbb/redis-config)
-
-[lock: 开箱即用的分布式锁](https://github.com/houbb/lock)
-
-[resubmit: 防重复提交](https://github.com/houbb/resubmit)
-
-[rate-limit: 限流](https://github.com/houbb/rate-limit/)
+| 名称 | 介绍 | 状态  |
+|:---|:---|:----|
+| [resubmit](https://github.com/houbb/resubmit) | 防止重复提交核心库 | 已开源 |
+| [rate-limit](https://github.com/houbb/rate-limit) | 限流核心库 | 已开源 |
+| [cache](https://github.com/houbb/cache) | 手写渐进式 redis | 已开源 |
+| [lock](https://github.com/houbb/lock) | 开箱即用的分布式锁 | 已开源 |
+| [common-cache](https://github.com/houbb/common-cache) | 通用缓存标准定义 | 已开源 |
+| [redis-config](https://github.com/houbb/redis-config) | 兼容各种常见的 redis 配置模式 | 已开源 |
+| [quota-server](https://github.com/houbb/quota-server) | 限额限次核心服务 | 待开始 |
+| [quota-admin](https://github.com/houbb/quota-admin) | 限额限次控台 | 待开始 |
+| [flow-control-server](https://github.com/houbb/flow-control-server) | 流控核心服务 | 待开始 |
+| [flow-control-admin](https://github.com/houbb/flow-control-admin) | 流控控台 | 待开始 |
 
