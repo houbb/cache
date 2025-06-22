@@ -26,11 +26,28 @@ public final class CacheInterceptors {
     @SuppressWarnings("all")
     public static <K,V> List<ICacheInterceptor<K,V>> defaults() {
         List<ICacheInterceptor<K,V>> list = new ArrayList<>();
-        list.add(new CacheInterceptorCommonCost());
-        list.add(new CacheInterceptorEvict());
-        list.add(new CacheInterceptorAof());
-        list.add(new CacheInterceptorRefresh());
+        list.add(CacheInterceptors.<K, V>commonCost());
+        list.add(CacheInterceptors.<K, V>evict());
+        list.add(CacheInterceptors.<K, V>aof());
+        list.add(CacheInterceptors.<K, V>refresh());
         return list;
     }
+
+    public static <K,V> ICacheInterceptor<K,V> commonCost() {
+        return new CacheInterceptorCommonCost<>();
+    }
+
+    public static <K,V> ICacheInterceptor<K,V> evict() {
+        return new CacheInterceptorEvict<>();
+    }
+
+    public static <K,V> ICacheInterceptor<K,V> aof() {
+        return new CacheInterceptorAof<>();
+    }
+
+    public static <K,V> ICacheInterceptor<K,V> refresh() {
+        return new CacheInterceptorRefresh<>();
+    }
+
 
 }

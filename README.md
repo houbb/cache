@@ -1,10 +1,8 @@
 # 项目简介
 
-[Cache](https://github.com/houbb/cache) 用于实现一个可拓展的本地缓存。
+[Cache](https://github.com/houbb/cache) 用于实现一个可拓展的高性能本地缓存。
 
-有人的地方，就有江湖。
-
-有高性能的地方，就有 cache。
+有人的地方，就有江湖。 有高性能的地方，就有 cache。
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.houbb/cache/badge.svg)](http://mvnrepository.com/artifact/com.github.houbb/cache)
 [![Build Status](https://www.travis-ci.org/houbb/cache.svg?branch=master)](https://www.travis-ci.org/houbb/cache?branch=master)
@@ -17,7 +15,7 @@
 
 - 便于后期多级缓存开发
 
-- 学以致用，开发一个类似于 redis 的渐进式缓存框架
+- 学以致用，开发一个类似于 redis 的本地缓存渐进式缓存框架
 
 ## 特性
 
@@ -40,6 +38,8 @@
 # 变更日志
 
 > [变更日志](https://github.com/houbb/cache/blob/master/doc/CHANGELOG.md)
+
+v1.0.0 对原始代码进行大幅度调整，让整体更加简洁+方便拓展。
 
 # 快速开始
 
@@ -80,6 +80,9 @@ Assert.assertEquals(2, cache.size());
 [3, 4]
 ```
 
+
+# 引导类
+
 ## 引导类配置属性
 
 `CacheBs` 作为缓存的引导类，支持 fluent 写法，编程更加优雅便捷。
@@ -91,29 +94,60 @@ ICache<String, String> cache = CacheBs.<String,String>newInstance()
         .map(CacheMaps.<String,String>defaults())
         .evict(CacheEvicts.<String, String>defaults())
         .expire(CacheExpires.<String, String>defaults())
-        .interceptorList(CacheInterceptors.<String, String>defaults())
         .load(CacheLoads.<String, String>defaults())
         .persist(CachePersists.<String, String>defaults())
+        .interceptorList(CacheInterceptors.<String, String>defaults())
         .size(2)
         .build();
 ```
 
 这些实现都有默认策略，同时全部支持自定义。
 
-## 驱逐策略
+## map 数据存储
+
+### 说明
+
+用于存储缓存的数据，简单起见，目前保留了 Map 接口的常用核心方法。
+
+### 内置策略
+
+目前内置了几种策略，可以直接通过 `CacheMaps` 工具类创建。
+
+| 策略                | 说明                         |
+|:------------------|:---------------------------|
+| defaults()        | 默认策略，目前为 concurrentHashMap |
+| hashMap()           | 基于 HashMap 实现              |
+| concurrentHashMap() | 基于 ConcurrentHashMap                        |
+
+## evict 驱逐策略
+
+### 说明
+
+当 map 的数据超过指定的数量时，对应的驱除策略。
+
+### 内置策略
 
 目前内置了几种淘汰策略，可以直接通过 `CacheEvicts` 工具类创建。
 
-| 策略 | 说明 |
-|:---|:---|
-| none | 没有任何淘汰策略 |
-| fifo | 先进先出（默认策略） |
-| lru | 最基本的朴素 LRU 策略，性能一般 |
-| lruDoubleListMap | 基于双向链表+MAP 实现的朴素 LRU，性能优于 lru |
-| lru2Q | 基于 LRU 2Q 的改进版 LRU 实现，命中率优于朴素LRU |
-| lru2 | 基于 LRU-2 的改进版 LRU 实现，命中率优于 lru2Q |
+| 策略                 | 说明                               |
+|:-------------------|:---------------------------------|
+| defaults()         | 默认策略，目前为 FIFO                    |
+| none()             | 没有任何淘汰策略                         |
+| fifo()             | 先进先出                             |
+| lru()              | 最基本的朴素 LRU 策略，性能一般               |
+| lruDoubleListMap() | 基于双向链表+MAP 实现的朴素 LRU，性能优于 lru    |
+| lru2Q()            | 基于 LRU 2Q 的改进版 LRU 实现，命中率优于朴素LRU |
+| lru2()             | 基于 LRU-2 的改进版 LRU 实现，命中率优于 lru2Q |
 
 ## 过期支持
+
+### 说明
+
+类似 redis，支持通过 `expireAt(key, linuxTime)` 指定数据的过期时间。
+
+会有定时调度对数据进行过期处理。
+
+### 入门例子
 
 ```java
 ICache<String, String> cache = CacheBs.<String,String>newInstance()
@@ -134,17 +168,41 @@ System.out.println(cache.keySet());
 
 `cache.expireAt("1", now+40);` 指定对应的 key 在 40ms 后过期。
 
-# 添加 load 加载器
+### 内置策略
 
-## 说明
+目前内置了几种策略，可以直接通过 `CacheExpires` 工具类创建。
+
+| 策略                 | 说明                 |
+|:-------------------|:-------------------|
+| defaults()         | 默认策略，目前为 random      |
+| none()             | 没有任何过期策略           |
+| random()           | 随机 key，类似 redis    |
+| sort()             | 按照过期时间排序处理，需要额外的空间 |
+
+## load 加载器
+
+### 说明
 
 有时候我们需要在 cache 初始化的时候，添加对应的数据初始化。
 
 后期可以从文件等地方加载数据。
 
-## 实现
+建议和 persist 持久化配套使用。
 
-实现 `AbstractCacheLoad` 抽象类即可。
+### 内置策略
+
+目前内置了几种策略，可以直接通过 `CacheLoads` 工具类创建。
+
+| 策略          | 说明            |
+|:------------|:--------------|
+| defaults()  | 默认策略，目前为 none |
+| none()      | 空实现           |
+| aof()       | AOF 模式        |
+| dbJson()    | RDB 模式        |
+
+### 实现
+
+继承 `AbstractCacheLoad` 抽象类即可。
 
 ```java
 public class MyCacheLoad extends AbstractCacheLoad<String,String> {
@@ -160,7 +218,7 @@ public class MyCacheLoad extends AbstractCacheLoad<String,String> {
 
 我们在缓存初始化的时候，放入 2 个元素。
 
-## 测试效果
+### 测试效果
 
 ```java
 ICache<String, String> cache = CacheBs.<String,String>newInstance()
@@ -170,15 +228,15 @@ ICache<String, String> cache = CacheBs.<String,String>newInstance()
 Assert.assertEquals(2, cache.size());
 ```
 
-# 添加 persist 持久化类
+## persist 持久化类
 
-## 说明
+### 说明
 
 如果我们只是把文件放在内存中，应用重启信息就丢失了。
 
 有时候我们希望这些 key/value 信息可以持久化，存储到文件或者 database 中。
 
-## 持久化
+### 持久化
 
 `CachePersists.<String, String>dbJson("1.rdb")` 指定将数据文件持久化到文件中。
 
@@ -205,8 +263,6 @@ public void persistTest() throws InterruptedException {
 {"key":"1","value":"1"}
 ```
 
-## 加载器
-
 存储之后，可以使用对应的加载器读取文件内容：
 
 ```java
@@ -217,27 +273,43 @@ ICache<String, String> cache = CacheBs.<String,String>newInstance()
 Assert.assertEquals(2, cache.size());
 ```
 
+### 内置策略
+
+目前内置了几种策略，可以直接通过 `CachePersists` 工具类创建。
+
+| 策略          | 说明            |
+|:------------|:--------------|
+| defaults()  | 默认策略，目前为 none |
+| none()      | 空实现           |
+| aof()       | AOF 模式        |
+| dbJson()    | RDB 模式        |
+
+## 拦截器
+
+### 说明
+
+为了方便我们针对常见的操作进行监听，暴露了操作的拦截器接口。
+
+备注：这个后续考虑拓展为类似于 dubbo 的拦截器，可能会把这个接口隐藏掉。暴露新的接口。
+
+### 内置策略
+
+默认的主要是功能性的策略，在 `CacheInterceptors.defaults()`，主要包含了如下4个。
+
+| 策略          | 说明             |
+|:------------|:---------------|
+| commonCost()  | 通用参数、耗时        |
+| evict()      | 驱逐相关的监听        |
+| aof()       | AOF 模式监听       |
+| refresh()    | expire 有效性刷新监听 |
+
+其中后3个是核心的功能相关，需要保留。支持自定义拓展。
+
 # 后期 Road-MAP
 
 ## 代码优化
 
-- [x] 接口调整，让其包含上下文，拓展性更强
-
-- [x] 不再自依赖 cache，移除改为依赖 map 本身
-
-- [x] expire 支持用户自定义
-
-- [x] 拦截器支持用户自定义，实现方式调整，不要用代理
-
-## 淘汰策略
-
-- [ ] CLOCK 算法
-
-- [ ] SC 二次机会
-
-- [ ] 老化算法
-
-- [ ] 弱引用
+- [ ] 用拦截器 chain 代替目前的循环 filter，让编码更加自然 
 
 ## 过期特性
 
@@ -262,10 +334,6 @@ Assert.assertEquals(2, cache.size());
 - [ ] expire 数量
 
 - [ ] 耗时统计
-
-## 并发
-
-- [ ] 并发安全保障
 
 ## 其他
 
