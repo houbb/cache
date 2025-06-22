@@ -21,23 +21,21 @@
 
 ## 特性
 
-- MVP 开发策略
-
 - fluent 流式编程体验，纵享丝滑
 
 - 支持 cache 固定大小
 
-- 支持自定义 map 实现策略
+- 支持自定义 map 策略
 
-- 支持 expire 过期特性
+- 支持自定义 expire 过期策略
 
 - 支持自定义 evict 驱除策略(内置 FIFO/LRU 多种驱除策略)
+
+- 支持 load 初始化和 persist 持久化（内置 RDB/AOF 模式）
 
 - 支持自定义监听器
 
 - 日志整合框架，自适应常见日志
-
-- 支持 load 初始化和 persist 持久化（内置 RDB/AOF 模式）
 
 # 变更日志
 
@@ -146,15 +144,15 @@ System.out.println(cache.keySet());
 
 ## 实现
 
-实现 `ICacheLoad` 接口即可。
+实现 `AbstractCacheLoad` 抽象类即可。
 
 ```java
-public class MyCacheLoad implements ICacheLoad<String,String> {
+public class MyCacheLoad extends AbstractCacheLoad<String,String> {
 
     @Override
-    public void load(ICache<String, String> cache) {
-        cache.put("1", "1");
-        cache.put("2", "2");
+    public void doLoad() {
+        super.context.map().put("1", "1");
+        super.context.map().put("2", "2");
     }
 
 }
