@@ -3,6 +3,8 @@ package com.github.houbb.cache.core.bs;
 import com.github.houbb.cache.api.ICache;
 import com.github.houbb.cache.core.load.MyCacheLoad;
 import com.github.houbb.cache.core.support.evict.CacheEvicts;
+import com.github.houbb.cache.core.support.expire.CacheExpires;
+import com.github.houbb.cache.core.support.interceptor.CacheInterceptors;
 import com.github.houbb.cache.core.support.load.CacheLoads;
 import com.github.houbb.cache.core.support.map.CacheMaps;
 import com.github.houbb.cache.core.support.persist.CachePersists;
@@ -44,8 +46,12 @@ public class CacheBsTest {
     @Test
     public void configTest() {
         ICache<String, String> cache = CacheBs.<String,String>newInstance()
-                .map(CacheMaps.<String,String>hashMap())
-                .evict(CacheEvicts.<String, String>fifo())
+                .map(CacheMaps.<String,String>defaults())
+                .evict(CacheEvicts.<String, String>defaults())
+                .expire(CacheExpires.<String, String>defaults())
+                .interceptorList(CacheInterceptors.<String, String>defaults())
+                .load(CacheLoads.<String, String>defaults())
+                .persist(CachePersists.<String, String>defaults())
                 .size(2)
                 .build();
 

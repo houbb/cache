@@ -31,17 +31,13 @@
 
 - 支持 expire 过期特性
 
-- 支持自定义 evict 驱除策略
+- 支持自定义 evict 驱除策略(内置 FIFO/LRU 多种驱除策略)
 
-内置 FIFO 和 LRU 驱除策略
-
-- 支持自定义删除监听器
+- 支持自定义监听器
 
 - 日志整合框架，自适应常见日志
 
-- 支持 load 初始化和 persist 持久化
-
-RDB 和 AOF 两种模式
+- 支持 load 初始化和 persist 持久化（内置 RDB/AOF 模式）
 
 # 变更日志
 
@@ -94,13 +90,19 @@ Assert.assertEquals(2, cache.size());
 
 ```java
 ICache<String, String> cache = CacheBs.<String,String>newInstance()
-                .map(Maps.<String,String>hashMap())
-                .evict(CacheEvicts.<String, String>fifo())
-                .size(2)
-                .build();
+        .map(CacheMaps.<String,String>defaults())
+        .evict(CacheEvicts.<String, String>defaults())
+        .expire(CacheExpires.<String, String>defaults())
+        .interceptorList(CacheInterceptors.<String, String>defaults())
+        .load(CacheLoads.<String, String>defaults())
+        .persist(CachePersists.<String, String>defaults())
+        .size(2)
+        .build();
 ```
 
-## 淘汰策略
+这些实现都有默认策略，同时全部支持自定义。
+
+## 驱逐策略
 
 目前内置了几种淘汰策略，可以直接通过 `CacheEvicts` 工具类创建。
 
