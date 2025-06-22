@@ -1,18 +1,18 @@
 package com.github.houbb.cache.core.load;
 
-import com.github.houbb.cache.api.ICache;
-import com.github.houbb.cache.api.ICacheLoad;
+import com.github.houbb.cache.core.support.load.AbstractCacheLoad;
 
 /**
  * @author binbin.hou
  * @since 0.0.7
  */
-public class MyCacheLoad implements ICacheLoad<String,String> {
+public class MyCacheLoad extends AbstractCacheLoad<String,String> {
 
     @Override
-    public void load(ICache<String, String> cache) {
-        cache.put("1", "1");
-        cache.put("2", "2");
+    public void doLoad() {
+        super.context.map().put("1", "1");
+        super.context.map().put("2", "2");
     }
+
 
 }

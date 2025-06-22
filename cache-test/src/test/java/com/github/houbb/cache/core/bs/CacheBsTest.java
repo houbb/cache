@@ -1,12 +1,10 @@
 package com.github.houbb.cache.core.bs;
 
 import com.github.houbb.cache.api.ICache;
-import com.github.houbb.cache.core.listener.MyRemoveListener;
-import com.github.houbb.cache.core.listener.MySlowListener;
 import com.github.houbb.cache.core.load.MyCacheLoad;
 import com.github.houbb.cache.core.support.evict.CacheEvicts;
 import com.github.houbb.cache.core.support.load.CacheLoads;
-import com.github.houbb.cache.core.support.map.Maps;
+import com.github.houbb.cache.core.support.map.CacheMaps;
 import com.github.houbb.cache.core.support.persist.CachePersists;
 import org.junit.Assert;
 import org.junit.Test;
@@ -46,7 +44,7 @@ public class CacheBsTest {
     @Test
     public void configTest() {
         ICache<String, String> cache = CacheBs.<String,String>newInstance()
-                .map(Maps.<String,String>hashMap())
+                .map(CacheMaps.<String,String>hashMap())
                 .evict(CacheEvicts.<String, String>fifo())
                 .size(2)
                 .build();
@@ -73,9 +71,11 @@ public class CacheBsTest {
         cache.put("1", "1");
         cache.put("2", "2");
 
-        cache.expire("1", 40);
+        long now = System.currentTimeMillis();
+        cache.expireAt("1", now+40);
         Assert.assertEquals(2, cache.size());
 
+        // 沉睡 50S，让其过期
         TimeUnit.MILLISECONDS.sleep(50);
         Assert.assertEquals(1, cache.size());
         System.out.println(cache.keySet());
@@ -89,7 +89,6 @@ public class CacheBsTest {
     public void cacheRemoveListenerTest() {
         ICache<String, String> cache = CacheBs.<String,String>newInstance()
                 .size(1)
-                .addRemoveListener(new MyRemoveListener<String, String>())
                 .build();
 
         cache.put("1", "1");
@@ -121,7 +120,7 @@ public class CacheBsTest {
                 .build();
 
         Assert.assertEquals(2, cache.size());
-        TimeUnit.SECONDS.sleep(5);
+        TimeUnit.SECONDS.sleep(2);
     }
 
     /**
@@ -144,7 +143,6 @@ public class CacheBsTest {
     @Test
     public void slowLogTest() {
         ICache<String, String> cache = CacheBs.<String,String>newInstance()
-                .addSlowListener(new MySlowListener())
                 .build();
 
         cache.put("1", "2");
@@ -163,7 +161,7 @@ public class CacheBsTest {
                 .build();
 
         cache.put("1", "1");
-        cache.expire("1", 10);
+        cache.expireAt("1", 10);
         cache.remove("2");
 
         TimeUnit.SECONDS.sleep(1);
@@ -226,28 +224,6 @@ public class CacheBsTest {
         System.out.println(cache.keySet());
     }
 
-    /**
-     * 基于 LinkedHashMap 实现
-     * @since 0.0.12
-     */
-    @Test
-    public void lruLinkedHashMapTest()  {
-        ICache<String, String> cache = CacheBs.<String,String>newInstance()
-                .size(3)
-                .evict(CacheEvicts.<String, String>lruLinkedHashMap())
-                .build();
-
-        cache.put("A", "hello");
-        cache.put("B", "world");
-        cache.put("C", "FIFO");
-
-        // 访问一次A
-        cache.get("A");
-        cache.put("D", "LRU");
-
-        Assert.assertEquals(3, cache.size());
-        System.out.println(cache.keySet());
-    }
 
     /**
      * 基于 LRU 2Q 实现

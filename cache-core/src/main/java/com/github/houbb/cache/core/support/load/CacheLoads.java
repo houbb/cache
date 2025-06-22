@@ -1,6 +1,9 @@
 package com.github.houbb.cache.core.support.load;
 
 import com.github.houbb.cache.api.ICacheLoad;
+import com.github.houbb.cache.core.support.load.impl.CacheLoadAof;
+import com.github.houbb.cache.core.support.load.impl.CacheLoadDbJson;
+import com.github.houbb.cache.core.support.load.impl.CacheLoadNone;
 
 /**
  *
@@ -11,6 +14,17 @@ import com.github.houbb.cache.api.ICacheLoad;
 public final class CacheLoads {
 
     private CacheLoads(){}
+
+    /**
+     * 默认加载
+     * @param <K> key
+     * @param <V> value
+     * @return 值
+     * @since 1.0.0
+     */
+    public static <K,V> ICacheLoad<K,V> defaults() {
+        return none();
+    }
 
     /**
      * 无加载

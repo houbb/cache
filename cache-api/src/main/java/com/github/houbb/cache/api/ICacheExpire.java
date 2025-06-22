@@ -1,7 +1,6 @@
 package com.github.houbb.cache.api;
 
 import java.util.Collection;
-import java.util.Map;
 
 /**
  * 缓存过期接口
@@ -11,12 +10,19 @@ import java.util.Map;
 public interface ICacheExpire<K,V> {
 
     /**
+     * 初始化
+     * @param cacheExpireContext 上下文
+     * @return 结果
+     */
+    ICacheExpire<K, V> init(final ICacheExpireContext<K, V> cacheExpireContext);
+
+    /**
      * 指定过期信息
      * @param key key
      * @param expireAt 什么时候过期
      * @since 0.0.3
      */
-    void expire(final K key, final long expireAt);
+    void expireAt(final K key, final long expireAt);
 
     /**
      * 惰性删除中需要处理的 keys
@@ -28,6 +34,7 @@ public interface ICacheExpire<K,V> {
     /**
      * 待过期的 key
      * 不存在，则返回 null
+     *
      * @param key 待过期的 key
      * @return 结果
      * @since 0.0.8

@@ -11,9 +11,14 @@ public interface ICacheLoad<K, V> {
 
     /**
      * 加载缓存信息
-     * @param cache 缓存
+     * @param loadContext 缓存
      * @since 0.0.7
      */
-    void load(final ICache<K,V> cache);
+    void init(final ICacheLoadContext<K,V> loadContext);
+
+    /**
+     * 加载初始化信息
+     */
+    void load();
 
 }

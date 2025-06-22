@@ -1,9 +1,9 @@
 package com.github.houbb.cache.core.support.interceptor;
 
-import com.github.houbb.cache.api.ICache;
+import com.github.houbb.cache.api.ICacheContext;
 import com.github.houbb.cache.api.ICacheInterceptorContext;
 
-import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * 耗时统计
@@ -17,13 +17,23 @@ import java.lang.reflect.Method;
  */
 public class CacheInterceptorContext<K,V> implements ICacheInterceptorContext<K,V> {
 
-    private ICache<K,V> cache;
+    /**
+     * 类型列表
+     * @since 1.0.0
+     */
+    private List<String> typeList;
+
+    /**
+     * 缓存上下文
+     * @since 1.0.0
+     */
+    private ICacheContext<K, V> cacheContext;
 
     /**
      * 执行的方法信息
      * @since 0.0.5
      */
-    private Method method;
+    private String methodName;
 
     /**
      * 执行的参数
@@ -54,22 +64,32 @@ public class CacheInterceptorContext<K,V> implements ICacheInterceptorContext<K,
     }
 
     @Override
-    public ICache<K, V> cache() {
-        return cache;
+    public List<String> typeList() {
+        return typeList;
     }
 
-    public CacheInterceptorContext<K, V> cache(ICache<K, V> cache) {
-        this.cache = cache;
+    public CacheInterceptorContext<K, V> typeList(List<String> typeList) {
+        this.typeList = typeList;
         return this;
     }
 
     @Override
-    public Method method() {
-        return method;
+    public ICacheContext<K, V> cacheContext() {
+        return cacheContext;
     }
 
-    public CacheInterceptorContext<K, V> method(Method method) {
-        this.method = method;
+    public CacheInterceptorContext<K, V> cacheContext(ICacheContext<K, V> cacheContext) {
+        this.cacheContext = cacheContext;
+        return this;
+    }
+
+    @Override
+    public String methodName() {
+        return methodName;
+    }
+
+    public CacheInterceptorContext<K, V> methodName(String methodName) {
+        this.methodName = methodName;
         return this;
     }
 

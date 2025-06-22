@@ -61,7 +61,7 @@ Maven 3.X 及其以上版本
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>cache-core</artifactId>
-    <version>0.0.15</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -110,7 +110,6 @@ ICache<String, String> cache = CacheBs.<String,String>newInstance()
 | fifo | 先进先出（默认策略） |
 | lru | 最基本的朴素 LRU 策略，性能一般 |
 | lruDoubleListMap | 基于双向链表+MAP 实现的朴素 LRU，性能优于 lru |
-| lruLinkedHashMap | 基于 LinkedHashMap 实现的朴素 LRU，与 lruDoubleListMap 差不多 |
 | lru2Q | 基于 LRU 2Q 的改进版 LRU 实现，命中率优于朴素LRU |
 | lru2 | 基于 LRU-2 的改进版 LRU 实现，命中率优于 lru2Q |
 
@@ -124,7 +123,8 @@ ICache<String, String> cache = CacheBs.<String,String>newInstance()
 cache.put("1", "1");
 cache.put("2", "2");
 
-cache.expire("1", 10);
+long now = System.currentTimeMillis();
+cache.expireAt("1", now+40);
 Assert.assertEquals(2, cache.size());
 
 TimeUnit.MILLISECONDS.sleep(50);
@@ -132,112 +132,7 @@ Assert.assertEquals(1, cache.size());
 System.out.println(cache.keySet());
 ```
 
-`cache.expire("1", 10);` 指定对应的 key 在 10ms 后过期。
-
-# 删除监听器
-
-## 说明
-
-淘汰和过期，这些都是缓存的内部行为。
-
-如果用户也关心的话，可以自定义删除监听器。
-
-## 自定义监听器
-
-直接实现 `ICacheRemoveListener` 接口即可。
-
-```java
-public class MyRemoveListener<K,V> implements ICacheRemoveListener<K,V> {
-
-    @Override
-    public void listen(ICacheRemoveListenerContext<K, V> context) {
-        System.out.println("【删除提示】可恶，我竟然被删除了！" + context.key());
-    }
-
-}
-```
-
-## 使用
-
-```java
-ICache<String, String> cache = CacheBs.<String,String>newInstance()
-        .size(1)
-        .addRemoveListener(new MyRemoveListener<String, String>())
-        .build();
-
-cache.put("1", "1");
-cache.put("2", "2");
-```
-
-- 测试日志
-
-```
-【删除提示】可恶，我竟然被删除了！2
-```
-
-# 添加慢操作监听器
-
-## 说明
-
-redis 中会存储慢操作的相关日志信息，主要是由两个参数构成：
-
-（1）slowlog-log-slower-than 预设阈值,它的单位是毫秒(1秒=1000000微秒)默认值是10000
-
-（2）slowlog-max-len 最多存储多少条的慢日志记录
-
-不过 redis 是直接存储到内存中，而且有长度限制。
-
-根据实际工作体验，如果我们可以添加慢日志的监听，然后有对应的存储或者报警，这样更加方便问题的分析和快速反馈。
-
-所以我们引入类似于删除的监听器。
-
-## 自定义监听器
-
-实现接口 `ICacheSlowListener`
-
-这里每一个监听器都可以指定自己的慢日志阈值，便于分级处理。
-
-```java
-public class MySlowListener implements ICacheSlowListener {
-
-    @Override
-    public void listen(ICacheSlowListenerContext context) {
-        System.out.println("【慢日志】name: " + context.methodName());
-    }
-
-    @Override
-    public long slowerThanMills() {
-        return 0;
-    }
-
-}
-```
-
-## 使用
-
-```java
-ICache<String, String> cache = CacheBs.<String,String>newInstance()
-        .addSlowListener(new MySlowListener())
-        .build();
-
-cache.put("1", "2");
-cache.get("1");
-```
-
-- 测试效果
-
-```
-[DEBUG] [2020-09-30 17:40:11.547] [main] [c.g.h.c.c.s.i.c.CacheInterceptorCost.before] - Cost start, method: put
-[DEBUG] [2020-09-30 17:40:11.551] [main] [c.g.h.c.c.s.i.c.CacheInterceptorCost.after] - Cost end, method: put, cost: 10ms
-【慢日志】name: put
-[DEBUG] [2020-09-30 17:40:11.554] [main] [c.g.h.c.c.s.i.c.CacheInterceptorCost.before] - Cost start, method: get
-[DEBUG] [2020-09-30 17:40:11.554] [main] [c.g.h.c.c.s.i.c.CacheInterceptorCost.after] - Cost end, method: get, cost: 1ms
-【慢日志】name: get
-```
-
-实际工作中，我们可以针对慢日志数据存储，便于后期分析。
-
-也可以直接接入报警系统，及时反馈问题。
+`cache.expireAt("1", now+40);` 指定对应的 key 在 40ms 后过期。
 
 # 添加 load 加载器
 
@@ -326,11 +221,13 @@ Assert.assertEquals(2, cache.size());
 
 ## 代码优化
 
-- [ ] 不再自依赖 cache，移除改为依赖 map 本身
+- [x] 接口调整，让其包含上下文，拓展性更强
 
-- [ ] expire 支持用户自定义
+- [x] 不再自依赖 cache，移除改为依赖 map 本身
 
-- [ ] 拦截器支持用户自定义，实现方式调整，不要用代理
+- [x] expire 支持用户自定义
+
+- [x] 拦截器支持用户自定义，实现方式调整，不要用代理
 
 ## 淘汰策略
 

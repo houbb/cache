@@ -1,5 +1,7 @@
 package com.github.houbb.cache.core.model;
 
+import com.github.houbb.cache.api.ICachePersistAofEntry;
+
 import java.util.Arrays;
 
 /**
@@ -7,7 +9,7 @@ import java.util.Arrays;
  * @author binbin.hou
  * @since 0.0.10
  */
-public class PersistAofEntry {
+public class PersistAofEntry implements ICachePersistAofEntry {
 
     /**
      * 参数信息
@@ -30,6 +32,7 @@ public class PersistAofEntry {
         return new PersistAofEntry();
     }
 
+    @Override
     public Object[] getParams() {
         return params;
     }
@@ -38,6 +41,7 @@ public class PersistAofEntry {
         this.params = params;
     }
 
+    @Override
     public String getMethodName() {
         return methodName;
     }

@@ -1,6 +1,9 @@
 package com.github.houbb.cache.core.support.persist;
 
 import com.github.houbb.cache.api.ICachePersist;
+import com.github.houbb.cache.core.support.persist.impl.CachePersistAof;
+import com.github.houbb.cache.core.support.persist.impl.CachePersistDbJson;
+import com.github.houbb.cache.core.support.persist.impl.CachePersistNone;
 
 /**
  * 缓存持久化工具类
@@ -10,6 +13,17 @@ import com.github.houbb.cache.api.ICachePersist;
 public final class CachePersists {
 
     private CachePersists(){}
+
+    /**
+     * 默认操作
+     * @param <K> key
+     * @param <V> value
+     * @return 结果
+     * @since 1.0.0
+     */
+    public static <K,V> ICachePersist<K,V> defaults() {
+        return none();
+    }
 
     /**
      * 无操作

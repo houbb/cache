@@ -1,6 +1,7 @@
 package com.github.houbb.cache.core.support.evict;
 
 import com.github.houbb.cache.api.ICacheEvict;
+import com.github.houbb.cache.core.support.evict.impl.*;
 
 /**
  * 丢弃策略
@@ -11,6 +12,18 @@ import com.github.houbb.cache.api.ICacheEvict;
 public final class CacheEvicts {
 
     private CacheEvicts(){}
+
+    /**
+     * 默认策略
+     *
+     * @param <K> key
+     * @param <V> value
+     * @return 结果
+     * @since 1.0.0
+     */
+    public static <K, V> ICacheEvict<K, V> defaults() {
+        return fifo();
+    }
 
     /**
      * 无策略
@@ -59,20 +72,6 @@ public final class CacheEvicts {
      */
     public static <K, V> ICacheEvict<K, V> lruDoubleListMap() {
         return new CacheEvictLruDoubleListMap<>();
-    }
-
-
-    /**
-     * LRU 驱除策略
-     *
-     * 基于LinkedHashMap
-     * @param <K> key
-     * @param <V> value
-     * @return 结果
-     * @since 0.0.12
-     */
-    public static <K, V> ICacheEvict<K, V> lruLinkedHashMap() {
-        return new CacheEvictLruLinkedHashMap<>();
     }
 
     /**

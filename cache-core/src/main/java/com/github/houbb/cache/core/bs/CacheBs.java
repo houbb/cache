@@ -1,19 +1,22 @@
 package com.github.houbb.cache.core.bs;
 
 import com.github.houbb.cache.api.*;
-import com.github.houbb.cache.core.core.Cache;
+import com.github.houbb.cache.core.core.CacheContext;
+import com.github.houbb.cache.core.core.Caches;
 import com.github.houbb.cache.core.support.evict.CacheEvicts;
-import com.github.houbb.cache.core.support.listener.remove.CacheRemoveListeners;
-import com.github.houbb.cache.core.support.listener.slow.CacheSlowListeners;
+import com.github.houbb.cache.core.support.expire.CacheExpireContext;
+import com.github.houbb.cache.core.support.expire.CacheExpires;
+import com.github.houbb.cache.core.support.interceptor.CacheInterceptors;
+import com.github.houbb.cache.core.support.load.CacheLoadContext;
 import com.github.houbb.cache.core.support.load.CacheLoads;
+import com.github.houbb.cache.core.support.map.CacheMaps;
+import com.github.houbb.cache.core.support.persist.CachePersistContext;
 import com.github.houbb.cache.core.support.persist.CachePersists;
-import com.github.houbb.cache.core.support.proxy.CacheProxy;
 import com.github.houbb.heaven.util.common.ArgUtil;
 
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 缓存引导类
@@ -36,10 +39,16 @@ public final class CacheBs<K,V> {
     }
 
     /**
+     * 缓存策略
+     * @since 1.0.0
+     */
+    private ICache<K,V> cache = Caches.defaults();
+
+    /**
      * map 实现
      * @since 0.0.2
      */
-    private Map<K,V> map = new ConcurrentHashMap<>();
+    private ICacheMap<K, V> map = CacheMaps.defaults();
 
     /**
      * 大小限制
@@ -51,31 +60,32 @@ public final class CacheBs<K,V> {
      * 驱除策略
      * @since 0.0.2
      */
-    private ICacheEvict<K,V> evict = CacheEvicts.fifo();
-
-    /**
-     * 删除监听类
-     * @since 0.0.6
-     */
-    private final List<ICacheRemoveListener<K,V>> removeListeners = CacheRemoveListeners.defaults();
-
-    /**
-     * 慢操作监听类
-     * @since 0.0.9
-     */
-    private final List<ICacheSlowListener> slowListeners = CacheSlowListeners.none();
+    private ICacheEvict<K,V> evict = CacheEvicts.defaults();
 
     /**
      * 加载策略
      * @since 0.0.7
      */
-    private ICacheLoad<K,V> load = CacheLoads.none();
+    private ICacheLoad<K,V> load = CacheLoads.defaults();
 
     /**
      * 持久化实现策略
      * @since 0.0.8
      */
-    private ICachePersist<K,V> persist = CachePersists.none();
+    private ICachePersist<K,V> persist = CachePersists.defaults();
+
+    /**
+     * 内部的淘汰策略
+     * @since 1.0.0
+     */
+    private ICacheExpire<K, V> expire = CacheExpires.defaults();
+
+    /**
+     * 操作监听类
+     *
+     * @since 1.0.0
+     */
+    private List<ICacheInterceptor<K,V>> interceptorList = CacheInterceptors.defaults();
 
     /**
      * map 实现
@@ -83,7 +93,7 @@ public final class CacheBs<K,V> {
      * @return this
      * @since 0.0.2
      */
-    public CacheBs<K, V> map(Map<K, V> map) {
+    public CacheBs<K, V> map(ICacheMap<K, V> map) {
         ArgUtil.notNull(map, "map");
 
         this.map = map;
@@ -130,39 +140,52 @@ public final class CacheBs<K,V> {
     }
 
     /**
-     * 添加删除监听器
-     * @param removeListener 监听器
-     * @return this
-     * @since 0.0.6
-     */
-    public CacheBs<K, V> addRemoveListener(ICacheRemoveListener<K,V> removeListener) {
-        ArgUtil.notNull(removeListener, "removeListener");
-
-        this.removeListeners.add(removeListener);
-        return this;
-    }
-
-    /**
-     * 添加慢日志监听器
-     * @param slowListener 监听器
-     * @return this
-     * @since 0.0.9
-     */
-    public CacheBs<K, V> addSlowListener(ICacheSlowListener slowListener) {
-        ArgUtil.notNull(slowListener, "slowListener");
-
-        this.slowListeners.add(slowListener);
-        return this;
-    }
-
-    /**
      * 设置持久化策略
      * @param persist 持久化
      * @return this
      * @since 0.0.8
      */
     public CacheBs<K, V> persist(ICachePersist<K, V> persist) {
+        ArgUtil.notNull(persist, "persist");
+
         this.persist = persist;
+        return this;
+    }
+
+    /**
+     * 过期策略
+     * @param expire 策略
+     * @return 结果
+     * @since 1.0.0
+     */
+    public CacheBs<K, V> expire(ICacheExpire<K, V> expire) {
+        ArgUtil.notNull(expire, "expire");
+
+        this.expire = expire;
+        return this;
+    }
+
+    /**
+     * 操作监听类列表
+     * @param interceptorList 策略
+     * @return 结果
+     * @since 1.0.0
+     */
+    public CacheBs<K, V> interceptorList(List<ICacheInterceptor<K,V>> interceptorList) {
+        this.interceptorList = interceptorList;
+        return this;
+    }
+
+    /**
+     * 缓存类
+     * @param cache 策略
+     * @return 结果
+     * @since 1.0.0
+     */
+    public CacheBs<K, V> cache(ICache<K, V> cache) {
+        ArgUtil.notNull(cache, "cache");
+
+        this.cache = cache;
         return this;
     }
 
@@ -172,18 +195,51 @@ public final class CacheBs<K,V> {
      * @since 0.0.2
      */
     public ICache<K,V> build() {
-        Cache<K,V> cache = new Cache<>();
-        cache.map(map);
-        cache.evict(evict);
-        cache.sizeLimit(size);
-        cache.removeListeners(removeListeners);
-        cache.load(load);
-        cache.persist(persist);
-        cache.slowListeners(slowListeners);
+        CacheContext<K,V> tempCacheContext = new CacheContext<>();
+
+        // 排序
+        Collections.sort(interceptorList, new Comparator<ICacheInterceptor<K, V>>() {
+            @Override
+            public int compare(ICacheInterceptor<K, V> o1, ICacheInterceptor<K, V> o2) {
+                return o1.order() - o2.order();
+            }
+        });
+
+        tempCacheContext.map(map);
+        tempCacheContext.evict(evict);
+        tempCacheContext.size(size);
+        tempCacheContext.load(load);
+        tempCacheContext.persist(persist);
+        tempCacheContext.interceptorList(interceptorList);
+
+        // 初始化 expire
+        CacheExpireContext<K,V> expireContext = new CacheExpireContext<>();
+        expireContext.map(map);
+        this.expire.init(expireContext);
+
+        // 初始化 persist
+        CachePersistContext<K,V> persistContext = new CachePersistContext<>();
+        persistContext.map(map);
+        persistContext.expire(expire);
+        this.persist.init(persistContext);
+
+        // 初始化 load
+        CacheLoadContext<K,V> loadContext = new CacheLoadContext<>();
+        loadContext.map(map);
+        loadContext.expire(expire);
+        this.load.init(loadContext);
+
+        // 初始化 cache
+        tempCacheContext.expire(expire);
+        tempCacheContext.persist(persist);
+
+        this.cache.init(tempCacheContext);
+
+        // 执行数据 load
+        this.load.load();
 
         // 初始化
-        cache.init();
-        return CacheProxy.getProxy(cache);
+        return cache;
     }
 
 }
