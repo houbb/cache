@@ -351,6 +351,8 @@ Assert.assertEquals(2, cache.size());
 
 # 拓展阅读
 
+## 手写 Redis 系列
+
 [java从零手写实现redis（一）如何实现固定大小的缓存？](https://mp.weixin.qq.com/s/6J2K2k4Db_20eGU6xGYVTw)
 
 [java从零手写实现redis（三）redis expire 过期原理](https://mp.weixin.qq.com/s/BWfBc98oLqhAPLN2Hgkwow)
@@ -363,27 +365,32 @@ Assert.assertEquals(2, cache.size());
 
 [java从零手写实现redis（六）AOF 持久化原理详解及实现](https://mp.weixin.qq.com/s/rFuSjNF43Ybxy-qBCtgasQ)
 
-[java从零开始手写redis（七）LRU 缓存淘汰策略详解](https://mp.weixin.qq.com/s/X-OIqu_rgLskvbF2rZMP6Q)
+[java从零手写实现redis（七）LRU 缓存淘汰策略详解](https://mp.weixin.qq.com/s/X-OIqu_rgLskvbF2rZMP6Q)
 
 [java从零开始手写redis（八）朴素 LRU 淘汰算法性能优化](https://mp.weixin.qq.com/s/H8gOujnlTinctjVQqW0ITA)
 
-[java 从零开始手写 redis（九）LRU 缓存淘汰算法如何避免缓存污染](https://mp.weixin.qq.com/s/jzM_wDw37QXTeYMFYtRJaw)
+[java从零开始手写redis（九）LRU 缓存淘汰算法如何避免缓存污染](https://mp.weixin.qq.com/s/jzM_wDw37QXTeYMFYtRJaw)
 
-[java 从零开始手写 redis（十）缓存淘汰算法 LFU 最少使用频次](https://mp.weixin.qq.com/s/mUyCTCVObwY8XdLcO1pOWg)
+[java从零开始手写redis（十）缓存淘汰算法 LFU 最少使用频次](https://mp.weixin.qq.com/s/mUyCTCVObwY8XdLcO1pOWg)
 
-[java 从零开始手写 redis（11）clock时钟淘汰算法详解及实现](https://mp.weixin.qq.com/s/h9oub0TT94ObaiKZ7s5VsA)
+[java从零开始手写redis（十一）缓存淘汰算法 COLOK 算法](https://houbb.github.io/2018/09/01/cache-09-cache-hand-write-11-clock)
 
-[java 从零开始手写 redis（12）redis expire 过期如何实现随机获取keys？](https://mp.weixin.qq.com/s/YEBPtrOWIyBl9dsHa59JYg)
+[java从零开始手写redis（十二）过期策略如何实现随机 keys 淘汰](https://houbb.github.io/2018/09/01/cache-09-cache-hand-write-12-expire2)
 
-[java从零开始手写 redis（13）HashMap 源码原理详解](https://mp.weixin.qq.com/s/SURVmTf6K_ou85fShFzrNA)
+[java从零开始手写redis（十三）redis渐进式rehash详解](https://houbb.github.io/2018/09/01/cache-09-cache-hand-write-13-redis-rehash)
 
-[java 从零开始手写 redis（14）redis渐进式rehash详解](https://mp.weixin.qq.com/s/gPD-4wCwirdyO5QyHrXOIA)
+[java从零开始手写redis（十四）JDK HashMap 源码解析](https://mp.weixin.qq.com/s/SURVmTf6K_ou85fShFzrNA)
 
-[java 从零开始手写 redis（15）实现自己的 HashMap](https://mp.weixin.qq.com/s/e5fskVfeDMTuJhjEAd1gQw)
+[java从零开始手写redis（十四）JDK ConcurrentHashMap 源码解析](https://houbb.github.io/2018/09/12/java-concurrent-hashmap)
 
-[java 从零开始手写 redis（16）实现渐进式 rehash map](https://mp.weixin.qq.com/s/Lwp2js4lrHAbuQ5Fexer6w)
+[java从零开始手写redis（十五）实现自己的 HashMap](https://mp.weixin.qq.com/s/e5fskVfeDMTuJhjEAd1gQw)
 
-【实战汇总】
+[java从零开始手写redis（十六）实现渐进式 rehash map](https://mp.weixin.qq.com/s/Lwp2js4lrHAbuQ5Fexer6w)
+
+[java从零开始手写redis（十七）v1.0.0 全新版本架构优化+拓展性增强](https://houbb.github.io/2018/09/01/cache-09-cache-hand-write-17-v1.0.0-opt-code)
+
+
+## 实战汇总 
 
 [缓存实战（1）缓存雪崩、缓存击穿和缓存穿透入门简介及解决方案](https://mp.weixin.qq.com/s/yYE-zqJOyiLlEYXRj5by9g)
 
