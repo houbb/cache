@@ -12,6 +12,7 @@ public interface ICachePersist<K, V> {
     /**
      * 初始化上下文
      * @param persistContext 上下文
+     * @return this
      */
     ICachePersist<K, V> init(final ICachePersistContext<K,V> persistContext);
 

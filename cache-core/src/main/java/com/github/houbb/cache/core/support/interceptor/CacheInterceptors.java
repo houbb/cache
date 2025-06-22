@@ -20,6 +20,8 @@ public final class CacheInterceptors {
      * 默认通用
      * @return 结果
      * @since 0.0.5
+     * @param <K> key
+     * @param <V> value
      */
     @SuppressWarnings("all")
     public static <K,V> List<ICacheInterceptor<K,V>> defaults() {
