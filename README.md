@@ -55,7 +55,7 @@ Maven 3.X 及其以上版本
 <dependency>
     <groupId>com.github.houbb</groupId>
     <artifactId>cache-core</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
@@ -311,7 +311,7 @@ Assert.assertEquals(2, cache.size());
 
 - [ ] 用拦截器 chain 代替目前的循环 filter，让编码更加自然 
 
-- [ ] 引入异步
+- [ ] 引入异步，考虑参考 async
 
 ## 过期特性
 

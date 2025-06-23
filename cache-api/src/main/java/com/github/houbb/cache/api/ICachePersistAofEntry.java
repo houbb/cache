@@ -10,12 +10,14 @@ public interface ICachePersistAofEntry {
     /**
      * 参数信息
      * @since 1.0.0
+     * @return params
      */
     Object[] getParams();
 
     /**
      * 方法名称
      * @since 1.0.0
+     * @return methodName
      */
     String getMethodName();
 
