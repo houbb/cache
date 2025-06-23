@@ -26,7 +26,7 @@ public class CacheInterceptorRefresh<K,V> extends AbstractCacheInterceptor<K, V>
 
     @Override
     public void before(ICacheInterceptorContext<K,V> context) {
-        log.debug("[Cache] refresh start");
+        log.debug("[Cache] refresh before start");
         final ICacheContext<K,V> cacheContext = context.cacheContext();
 
         // 刷新指定的 Key
@@ -41,6 +41,7 @@ public class CacheInterceptorRefresh<K,V> extends AbstractCacheInterceptor<K, V>
         final ICacheMap<K,V> cacheMap = cacheContext.map();
         cacheContext.expire().refreshExpire(cacheMap.keySet());
     }
+
 
     @Override
     public void after(ICacheInterceptorContext<K,V> context) {

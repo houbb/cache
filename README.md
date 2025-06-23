@@ -311,6 +311,8 @@ Assert.assertEquals(2, cache.size());
 
 - [ ] 用拦截器 chain 代替目前的循环 filter，让编码更加自然 
 
+- [ ] 引入异步
+
 ## 过期特性
 
 - [ ] 过期策略添加随机返回

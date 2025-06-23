@@ -40,6 +40,30 @@ public class CacheBsTest {
     }
 
     /**
+     * 大小指定测试
+     * @since 0.0.2
+     */
+    @Test
+    public void fifoTest() {
+        ICache<String, String> cache =
+                CacheBs.<String,String>newInstance()
+                        .evict(CacheEvicts.<String, String>fifo())
+                .size(2)
+                .build();
+
+        cache.put("1", "1");
+        cache.put("2", "2");
+        cache.get("1");
+        cache.put("3", "3");
+        cache.get("1");
+        cache.put("4", "4");
+
+        Assert.assertEquals(2, cache.size());
+        Assert.assertEquals("[1, 4]", cache.keySet().toString());
+        System.out.println(cache.keySet());
+    }
+
+    /**
      * 配置指定测试
      * @since 0.0.2
      */

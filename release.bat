@@ -10,7 +10,7 @@ ECHO "============================= RELEASE START..."
 
 :: 版本号信息(需要手动指定)
 :::: 旧版本名称
-SET version=1.0.0
+SET version=1.0.1
 :::: 新版本名
 SET newVersion=1.1.0
 :::: 组织名称

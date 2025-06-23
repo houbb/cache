@@ -5,6 +5,7 @@ import com.github.houbb.cache.api.ICacheContext;
 import com.github.houbb.cache.api.ICacheInterceptor;
 import com.github.houbb.cache.core.constant.enums.CacheInterceptorType;
 import com.github.houbb.cache.core.support.interceptor.CacheInterceptorContext;
+import com.github.houbb.heaven.util.common.ArgUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -60,8 +61,13 @@ public class BasicCache<K,V> implements ICache<K,V> {
 
     @Override
     public ICache<K, V> expireAt(K key, long linuxTime) {
+        ArgUtil.notNull(key, "key");
+
         CacheInterceptorContext<K,V> context = doFilterBefore("expireAt",
-                Arrays.asList(CacheInterceptorType.COMMON.code(), CacheInterceptorType.AOF.code()),
+                Arrays.asList(CacheInterceptorType.COMMON.code(),
+                        CacheInterceptorType.EVICT_UPDATE.code(),
+                        CacheInterceptorType.AOF.code()
+                ),
                 key, linuxTime);
 
         cacheContext.expire().expireAt(key, linuxTime);
@@ -74,7 +80,8 @@ public class BasicCache<K,V> implements ICache<K,V> {
     @Override
     public int size() {
         CacheInterceptorContext<K,V> context = doFilterBefore("size",
-                Arrays.asList(CacheInterceptorType.COMMON.code(), CacheInterceptorType.REFRESH.code()));
+                Arrays.asList(CacheInterceptorType.COMMON.code(),
+                        CacheInterceptorType.REFRESH.code()));
 
         int result = cacheContext.map().size();
 
@@ -86,7 +93,8 @@ public class BasicCache<K,V> implements ICache<K,V> {
     @Override
     public boolean isEmpty() {
         CacheInterceptorContext<K,V> context = doFilterBefore("isEmpty",
-                Arrays.asList(CacheInterceptorType.COMMON.code(), CacheInterceptorType.REFRESH.code()));
+                Arrays.asList(CacheInterceptorType.COMMON.code(),
+                        CacheInterceptorType.REFRESH.code()));
 
         boolean result = cacheContext.map().isEmpty();
 
@@ -97,8 +105,13 @@ public class BasicCache<K,V> implements ICache<K,V> {
 
     @Override
     public boolean containsKey(K key) {
+        ArgUtil.notNull(key, "key");
+
         CacheInterceptorContext<K,V> context = doFilterBefore("containsKey",
-                Arrays.asList(CacheInterceptorType.COMMON.code(), CacheInterceptorType.REFRESH.code()),
+                Arrays.asList(CacheInterceptorType.COMMON.code(),
+                        CacheInterceptorType.REFRESH.code(),
+                        CacheInterceptorType.EVICT_UPDATE.code()
+                        ),
                 key);
 
         boolean result = cacheContext.map().containsKey(key);
@@ -110,8 +123,13 @@ public class BasicCache<K,V> implements ICache<K,V> {
 
     @Override
     public V get(K key) {
+        ArgUtil.notNull(key, "key");
+
         CacheInterceptorContext<K,V> context = doFilterBefore("get",
-                Arrays.asList(CacheInterceptorType.COMMON.code(), CacheInterceptorType.REFRESH.code()),
+                Arrays.asList(CacheInterceptorType.COMMON.code(),
+                        CacheInterceptorType.REFRESH.code(),
+                        CacheInterceptorType.EVICT_UPDATE.code()
+                ),
                 key);
 
         V result = cacheContext.map().get(key);
@@ -123,10 +141,13 @@ public class BasicCache<K,V> implements ICache<K,V> {
 
     @Override
     public V put(K key, V value) {
+        ArgUtil.notNull(key, "key");
+
         CacheInterceptorContext<K,V> context = doFilterBefore("put",
                 Arrays.asList(CacheInterceptorType.COMMON.code(),
                         CacheInterceptorType.REFRESH.code(),
                         CacheInterceptorType.EVICT.code(),
+                        CacheInterceptorType.EVICT_UPDATE.code(),
                         CacheInterceptorType.AOF.code()
                         ),
                 key, value);
@@ -140,10 +161,12 @@ public class BasicCache<K,V> implements ICache<K,V> {
 
     @Override
     public V remove(K key) {
+        ArgUtil.notNull(key, "key");
+
         CacheInterceptorContext<K,V> context = doFilterBefore("remove",
                 Arrays.asList(CacheInterceptorType.COMMON.code(),
                         CacheInterceptorType.REFRESH.code(),
-                        CacheInterceptorType.EVICT.code(),
+                        CacheInterceptorType.EVICT_REMOVE.code(),
                         CacheInterceptorType.AOF.code()
                 ),
                 key);

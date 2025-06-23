@@ -4,8 +4,7 @@ import com.github.houbb.cache.api.ICacheContext;
 import com.github.houbb.cache.core.model.CacheEntry;
 import com.github.houbb.cache.core.support.evict.AbstractCacheEvict;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * 丢弃策略-先进先出
@@ -18,7 +17,7 @@ public class CacheEvictFifo<K,V> extends AbstractCacheEvict<K,V> {
      * queue 信息
      * @since 0.0.2
      */
-    private final Queue<K> queue = new LinkedList<>();
+    private final Set<K> accessOrder = new LinkedHashSet<>();;
 
     @Override
     public CacheEntry<K,V> doEvict(ICacheContext<K, V> context, final K newKey) {
@@ -26,9 +25,12 @@ public class CacheEvictFifo<K,V> extends AbstractCacheEvict<K,V> {
 
         // 超过限制，执行移除
         if(isNeedEvict(context)) {
-            K evictKey = queue.remove();
-            // 移除最开始的元素
+            Iterator<K> iterator = accessOrder.iterator();
+            K evictKey = iterator.next();
             V evictValue = doEvictRemove(context, evictKey);
+            iterator.remove();
+
+            // 移除最开始的元素
             result = new CacheEntry<>(evictKey, evictValue);
         }
 
@@ -37,8 +39,8 @@ public class CacheEvictFifo<K,V> extends AbstractCacheEvict<K,V> {
 
     @Override
     public void updateKey(ICacheContext<K, V> context, K key) {
-        // 将新加的元素放入队尾
-        queue.add(key);
+        accessOrder.remove(key);
+        accessOrder.add(key);
     }
 
 }

@@ -9,6 +9,8 @@ public enum CacheInterceptorType {
     REFRESH("refresh", "刷新"),
     AOF("aof", "AOF持久化操作"),
     EVICT("evict", "驱逐"),
+    EVICT_UPDATE("evict_update", "驱逐更新"),
+    EVICT_REMOVE("evict_remove", "驱逐删除"),
     ;
 
     private final String code;
